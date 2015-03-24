@@ -57,6 +57,6 @@ namespace BioscoopSysteemWebsite.Domain.Interfaces {
 
         User GetUserById(int id);
 
-        void AddMovie(Movie movie, Pegi pegi);
+        IEnumerable<Room> GetAllRooms();
     }
 }

@@ -152,9 +152,8 @@ namespace BioscoopSysteemWebsite.Domain.Implementations
         }
 
         [ExcludeFromCodeCoverage]
-        public void AddMovie(Movie movie, Pegi pegi) {
-            context.Pegis.Add(pegi);
-            context.Movies.Add(movie);
+        public IEnumerable<Room> GetAllRooms() {
+            return context.Rooms;
         }
     }
 }

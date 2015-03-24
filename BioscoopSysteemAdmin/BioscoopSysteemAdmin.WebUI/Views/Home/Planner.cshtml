@@ -1,23 +1,12 @@
 ﻿@model BioscoopSysteemWebsite.Domain.Entities.User
 @using BioscoopSysteemWebsite.Domain.Entities
 @{
-    ViewBag.Title = "Index";
-    List<Show> showList = ViewBag.showList;
+    ViewBag.Title = "Planning";
 }
 
-<h2>Index</h2>
+<h2>Planning</h2>
 
 <div class="text-center">
-    <table class="table-responsive">
-        <thead>
-            <tr><td>Naam</td><td>Zaal</td><td>Datum</td><td>Starttijd</td><td>Popcornarrangement</td><td>VIP-kaartje</td></tr>
-        </thead>
-        <tbody>
-            @foreach (Show show in showList) {
-                <tr><td>@show.Movie.Name</td><td>@show.Room.RoomId</td><td>@show.StartTime.Day-@show.StartTime.Month-@show.StartTime.Year</td><td>@show.PopcornArrangement</td><td>@show.VIP</td></tr>
-            }
-        </tbody>
-    </table>
-
+    Welkom @Model.FirstName!
 </div>
 

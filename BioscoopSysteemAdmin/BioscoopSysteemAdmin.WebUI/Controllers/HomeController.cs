@@ -33,8 +33,6 @@ namespace BioscoopSysteemAdmin.WebUI.Controllers {
                     return View();
                 } else {
                     //check user type and sent to correct view
-                    List<Show> showList = repo.GetAllShows().Where(s => s.StartTime > DateTime.Now).ToList();
-                    ViewBag.showList = showList;
                     return View(actualUser.Role.Role, actualUser);
                 }
             } else {

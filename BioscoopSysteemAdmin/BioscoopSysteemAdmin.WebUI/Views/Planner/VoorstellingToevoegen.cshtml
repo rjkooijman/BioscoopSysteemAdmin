@@ -1,0 +1,26 @@
+﻿@model BioscoopSysteemWebsite.Domain.Entities.Show
+@using BioscoopSysteemWebsite.Domain.Entities
+@{
+    List<SelectListItem> movieListSelect = ViewBag.MovieSelect;
+    List<SelectListItem> roomListSelect = ViewBag.RoomSelect;
+    ViewBag.Title = "Voorstelling toevoegen";
+}
+<script>
+
+</script>
+<h2>VoorstellingToevoegen</h2>
+<div class="container">
+    <label for="film">Kies een film</label>
+    @Html.DropDownListFor(x => x.Movie.MovieId, movieListSelect, new { @class = "form-control" })
+    <label for="zaal">Kies een zaal</label>
+    @Html.DropDownListFor(x => x.RoomId, roomListSelect, new { @class = "form-control" })
+    <label for="popcorn">Popcornarrangement</label>
+    <div class="checkbox-inline">
+    @Html.CheckBoxFor(x => x.PopcornArrangement)
+    </div>
+    <label for="VIP">Vip-kaartje</label>
+    @Html.CheckBoxFor(x => x.VIP)
+    <label for="ladiesnight">Ladiesnight</label>
+    <input type="checkbox" id="ladies" name="ladiesnight" value="true"/>
+</div>
+

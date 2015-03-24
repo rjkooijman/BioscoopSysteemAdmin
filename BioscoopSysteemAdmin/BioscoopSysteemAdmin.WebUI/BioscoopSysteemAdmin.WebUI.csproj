@@ -121,7 +121,9 @@
   <ItemGroup>
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\KassaController.cs" />
     <Compile Include="Controllers\PlannerController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -138,6 +140,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Views\Home\Unauthorized.cshtml" />
+    <Content Include="Views\Planner\VoorstellingToevoegen.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -148,7 +151,8 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
-    <Folder Include="Views\Planner\" />
+    <Folder Include="Views\Admin\" />
+    <Folder Include="Views\Kassa\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\BioscoopSysteemWebsite\BioscoopSysteemWebsite.Domain\BioscoopSysteemWebsite.Domain.csproj">
