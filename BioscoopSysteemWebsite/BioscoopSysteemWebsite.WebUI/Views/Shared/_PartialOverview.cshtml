@@ -1,0 +1,123 @@
+﻿@using BioscoopSysteemWebsite.Domain.Entities
+@using System.Collections.Generic
+
+@model Dictionary<Movie, List<Show>>
+
+@if (Model != null) 
+{
+    //<Movie, List<Show>> orderedList = Model.OrderBy(r => r.Key.Name);
+    foreach (KeyValuePair<Movie, List<Show>> movieShows in Model.OrderBy(r => r.Key.Name))
+    {
+        <div id="filmcontainer">
+            <div class="col-md-2">
+                <img width="150" src="/resources/@(movieShows.Key.ImageData == null ? "geencover.jpg" : movieShows.Key.ImageData)" />       
+                <br />
+                <br />
+                <br />
+            </div>
+            <div class="col-md-8">
+                <div class="row">
+                    <h3>@movieShows.Key.Name</h3>
+                </div>
+                    @foreach (Show show in movieShows.Value.OrderBy(r => r.StartTime))
+                    {
+                        <div class="submitbtn timeButton" onclick="location.href='@Url.Action("Order", "Home", new { id = show.ShowID }, null)'">@show.StartTime.ToShortTimeString()</div>
+                    }
+            </div>
+            <div class="col-md-2">
+                <div class="row">
+                    <p>
+                    @if (Session["Language"].Equals(false)) {
+                        <b>Gesproken taal:</b>
+                    } else {
+                        <b>Language:</b>
+                    }
+                    <br /> @movieShows.Key.Language</p>
+                    <p>
+                    @if (Session["Language"].Equals(false))
+                    {
+                        <b>Ondertiteld:</b>
+                    }
+                    else
+                    {
+                        <b>Subtitles:</b>
+                    }
+                    <br /> @movieShows.Key.Subtitle
+                    </p>
+                    <p>
+                        <b>3D:</b>
+                        @if (@movieShows.Key.Type == true)
+                        {
+                            if (Session["Language"].Equals(false)){
+                                @:Ja
+                            }
+                            else
+                            {
+                                @:Yes
+                            }
+                            
+                        }
+                        else
+                        {
+                            if (Session["Language"].Equals(false)){
+                                @:Nee
+                            }
+                            else { 
+                                @:No
+                            }
+                        }
+                        <br />
+                            @if (Session["Language"].Equals(false)){
+                                 <b>Kijkwijzer:</b>
+                            } else {
+                                <b>PEGI:</b>
+                            }<br /> @if (@movieShows.Key.Pegi.All == true)
+                        {
+                            <img src="/resources/kijkwijzer_AL.png" style="height: 37px; width: 37px;" />
+                        }
+                        @if (@movieShows.Key.Pegi.SixPlus == true)
+                        {
+                            <img src="/resources/kijkwijzer_6.png" style="height: 37px; width: 37px;" />
+                        }
+                        @if (@movieShows.Key.Pegi.TwelvePlus == true)
+                        {
+                            <img src="/resources/kijkwijzer_12.png" style="height: 37px; width: 37px;" />
+                        }
+                        @if (@movieShows.Key.Pegi.SixteenPlus == true)
+                        {
+                            <img src="/resources/kijkwijzer_16.png" style="height: 37px; width: 37px;" />
+                        }
+                        @if (@movieShows.Key.Pegi.Violence == true)
+                        {
+                            <img src="/resources/kijkwijzer_violence.png" style="height: 37px; width: 37px;" />
+                        }
+                        @if (@movieShows.Key.Pegi.Horror == true)
+                        {
+                            <img src="/resources/kijkwijzer_horror.png" style="height: 37px; width: 37px;" />
+                        }
+                        @if (@movieShows.Key.Pegi.Sex == true)
+                        {
+                            <img src="/resources/kijkwijzer_sex.png" style="height: 37px; width: 37px;" />
+                        }
+                        @if (@movieShows.Key.Pegi.Language == true)
+                        {
+                            <img src="/resources/kijkwijzer_language.png" style="height: 37px; width: 37px;" />
+                        }
+                        @if (@movieShows.Key.Pegi.Drugs == true)
+                        {
+                            <img src="/resources/kijkwijzer_drugs.png" style="height: 37px; width: 37px;" />
+                        }
+                        @if (@movieShows.Key.Pegi.Racism == true)
+                        {
+                            <img src="/resources/kijkwijzer_discrimination.png" style="height: 37px; width: 37px;" />
+                        }
+                    </p>
+                </div>
+            </div>
+        </div>
+    }
+} else {
+    <p>
+        &nbsp;
+    </p>
+}

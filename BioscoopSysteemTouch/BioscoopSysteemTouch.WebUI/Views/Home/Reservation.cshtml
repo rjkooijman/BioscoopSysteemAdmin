@@ -1,0 +1,64 @@
+﻿@model BioscoopSysteemWebsite.Domain.Entities.Order
+@using BioscoopSysteemWebsite.Domain.Entities;
+@{
+    ViewBag.Title = "Reservation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript" src="~/scripts/jquery-2.1.3.min.js"></script>
+<section id="intro">
+    <div class="container">
+        <div class="introtext">
+            <div id="row">
+                <h1><a href="@Url.Action("Index", "Home")" class="backbtn"></a>Vul uw reserveringscode in.</h1>
+                <h1 id="txt"></h1>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="content">
+    <div class="container"><br />
+        <div class="col-md-12">
+            @using (Html.BeginForm())
+            {
+                <div class="textbox">
+                    <p class="validation-summary-errors">@ViewBag.Unknown</p>
+                    @Html.TextBoxFor(x => x.OrderId, new { @class = "form-control", @readonly = "readonly"})
+                </div>
+                <div id="keypad">
+                    <input class="rbutton" type="button" value="7" />
+                    <input class="rbutton" type="button" value="8" />
+                    <input class="rbutton" type="button" value="9" /><br />
+                    <input class="rbutton" type="button" value="4" />
+                    <input class="rbutton" type="button" value="5" />
+                    <input class="rbutton" type="button" value="6" /><br />
+                    <input class="rbutton" type="button" value="1" />
+                    <input class="rbutton" type="button" value="2" />
+                    <input class="rbutton" type="button" value="3" /><br />
+                    <input class="rbutton" type="button" value="0" />
+                    <input class="rbutton" type="button" value="clear" />
+                </div>
+                <input class="controlbtn" type="submit" value="Controleer" />
+            }
+            </div>
+        </div>
+</section>
+
+<script>
+    $(".rbutton").click(function (event) {
+        var value = $(this).val();
+        var originalValue;
+        if (!$.isNumeric($("#OrderId").val())) {
+            originalValue = "";
+        }
+        else {
+            originalValue = $("#OrderId").val();
+        }
+
+        if (isNaN(value)) {
+            $("#OrderId").val("");
+        } else {
+            value = parseInt(value);
+            $("#OrderId").val(originalValue + value);
+        }
+    });
+</script>

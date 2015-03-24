@@ -1,0 +1,21 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+<section id="intro">
+    <div class="container">
+        <div class="introtext">
+            <h1>Welkom bij Cinema Avans!</h1>
+            <h1 id="txt"></h1>
+        </div>
+    </div>
+</section>
+<section id="content">
+        <div class="container">
+                <div class="col-md-12">
+                    <div id="row">
+                        @Html.ActionLink("Kaartjes kopen", "Overview", "Home", null, new { @class = "button" })
+                        @Html.ActionLink("Reservering ophalen", "Reservation", "Home", null, new { @class = "button" })
+                    </div>
+                </div>
+         </div>
+</section>

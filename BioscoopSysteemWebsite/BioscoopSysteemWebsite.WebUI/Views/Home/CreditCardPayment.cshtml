@@ -1,0 +1,158 @@
+﻿@model BioscoopSysteemWebsite.Domain.Entities.Order
+@{
+    ViewBag.Title = "CreditCardPayment";
+    Layout = "~/Views/Shared/_LayoutCreditCard.cshtml";
+}
+@if (Session["Language"].Equals(false)) {
+    <div class="col_left">
+        <ol>
+            <li>
+                Kies uw betaalmethode
+            </li>
+            <li>
+                Bevestig betaling
+            </li>
+        </ol>
+    </div>
+
+    <div class="col_right">
+        <h1>
+            Creditcard betaling
+        </h1>
+        <p>
+            Uw bestelling werd met succes genoteerd.<br>
+            Volg de onderstaande stappen om uw bestelling af te ronden.<br>
+        </p>
+        <form>
+            <table>
+                <tr>
+                    <td>
+                        Voornaam
+                    </td>
+                    <td>
+                        <input type="text" name="firstname"><br>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Achternaam
+                    </td>
+                    <td>
+                        <input type="text" name="lastname"><br>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Credit Card Nummer
+                    </td>
+                    <td>
+                        <input type="text" name="CCnumber"><br>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <img id="cc_betalen" src="/Resources/creditcard_logo.png" alt="visa/mastercard logo" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Vervaldatum
+                    </td>
+                    <td>
+                        <input type="text" name="CCnumber" placeholder="MM-JJJJ"><br>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        CSC Nummer
+                    </td>
+                    <td>
+                        <input type="text" name="CSCnumber"><br>
+                    </td>
+                </tr>
+            </table>
+            <br>
+        </form>
+        <div class="submitbtn">
+            @Html.ActionLink("Bestellen", "Paid", new { @Model.OrderId })
+        </div>
+    </div>
+}
+else
+{
+    <div class="col_left">
+        <ol>
+            <li>
+                Choose your method of payment
+            </li>
+            <li>
+                Confirm payment
+            </li>
+        </ol>
+    </div>
+
+    <div class="col_right">
+        <h1>
+            Payment with CreditCard
+        </h1>
+        <p>
+            Your order was listed successfully.<br />
+            Follow the steps below to complete your order.<br />
+        </p>
+        <form>
+            <table>
+                <tr>
+                    <td>
+                        First name
+                    </td>
+                    <td>
+                        <input type="text" name="firstname"><br>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Last name
+                    </td>
+                    <td>
+                        <input type="text" name="lastname"><br>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Credit Card Number
+                    </td>
+                    <td>
+                        <input type="text" name="CCnumber"><br>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <img id="cc_betalen" src="/Resources/creditcard_logo.png" alt="visa/mastercard logo" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Date of expiration
+                    </td>
+                    <td>
+                        <input type="text" name="CCnumber" placeholder="MM-JJJJ"><br>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        CSC Number
+                    </td>
+                    <td>
+                        <input type="text" name="CSCnumber"><br>
+                    </td>
+                </tr>
+            </table>
+            <br>
+        </form>
+        <div class="submitbtn">
+            @Html.ActionLink("Order", "Paid", new { @Model.OrderId })
+        </div>
+    </div>
+}

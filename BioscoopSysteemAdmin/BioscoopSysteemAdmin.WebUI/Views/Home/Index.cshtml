@@ -1,0 +1,23 @@
+﻿@model BioscoopSysteemWebsite.Domain.Entities.User
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+@using (Html.BeginForm( "Index", "Home", FormMethod.Post)) {
+    @Html.ValidationSummary()
+    <div class="validation-summary-errors">
+        @ViewBag.IncorrectUser
+        @ViewBag.IncorrectPassword
+    </div>
+    <div>
+        <label>Logincode</label> @Html.TextBoxFor(x => x.UserId, new { @class = "form-control" })
+    </div>
+    <div>
+        <label>Wachtwoord</label> @Html.PasswordFor(x => x.Password, new { @class = "form-control" })
+    </div>
+    <div class="text-center">
+        <input class="btn btn-success" type="submit" value="Login" />
+    </div>
+}

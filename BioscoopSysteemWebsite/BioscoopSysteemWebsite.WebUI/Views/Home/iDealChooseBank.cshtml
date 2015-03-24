@@ -1,0 +1,86 @@
+﻿@{
+    ViewBag.Title = "iDealChooseBank";
+    Layout = "~/Views/Shared/_LayoutPayment.cshtml";
+}
+
+@if (Session["Language"].Equals(false)) {
+
+<div class="col_left">
+    <ol>
+        <li>
+            Kies uw betaalmethode
+        </li>
+        <li>
+            Bevestig betaling
+        </li>
+    </ol>
+</div>
+
+<div class="col_right">
+    <h1>
+        Uw bestelling werd geregistreerd
+    </h1>
+    <p>
+        Uw bestelling werd met succes genoteerd.<br>
+        Volg de onderstaande stappen om uw bestelling af te ronden.<br>
+    </p>
+    <div class="kies_bank">
+        <img src="~/Resources/ideal_logo.png" alt="iDeal logo" />
+        <p>
+            U kan nu uw bestelling met iDeal betalen:<br>
+            Kies in de lijst hieronder uw bank en klik dan op de knop onder de lijst.<br>
+        </p>
+        @using (Html.BeginForm("iDealPayment", "Home")) {
+                @Html.DropDownList("Bank", new SelectListItem[]{
+                new SelectListItem() {Text = "Rabobank", Value="Rabo"},
+                new SelectListItem() {Text = "ABN Amro", Value="ABN"},
+                new SelectListItem() {Text = "ING Bank", Value="ING"},
+                new SelectListItem() {Text = "SNS Bank", Value="SNS"},
+                new SelectListItem() {Text = "ASN Bank", Value="ASN"}})
+        <br><br>
+        <input type="submit" value="Selecteer">
+        }
+    </div>
+</div>
+
+} else {
+
+<div class="col_left">
+    <ol>
+        <li>
+            Choose your method of payment
+        </li>
+        <li>
+            Confirm payment
+        </li>
+    </ol>
+</div>
+
+<div class="col_right">
+    <h1>
+        Your order was received.
+    </h1>
+    <p>
+        Your order was sucesfully received.<br />
+        Follow the following steps to finish your order.<br />
+    </p>
+    <div class="kies_bank">
+        <img src="~/Resources/ideal_logo.png" alt="iDeal logo" />
+        <p>
+            You can now pay your order using iDeal:<br />
+            Select your bank in the following list en press the select button.<br />
+        </p>
+        @using (Html.BeginForm("iDealPayment", "Home")) {
+                @Html.DropDownList("Bank", new SelectListItem[]{
+                new SelectListItem() {Text = "Rabobank", Value="Rabo"},
+                new SelectListItem() {Text = "ABN Amro", Value="ABN"},
+                new SelectListItem() {Text = "ING Bank", Value="ING"},
+                new SelectListItem() {Text = "SNS Bank", Value="SNS"},
+                new SelectListItem() {Text = "ASN Bank", Value="ASN"}})
+        <br><br>
+        <input type="submit" value="Select">
+        }
+    </div>
+</div>
+}
+

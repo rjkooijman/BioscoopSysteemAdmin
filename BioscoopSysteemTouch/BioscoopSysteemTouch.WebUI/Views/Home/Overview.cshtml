@@ -1,0 +1,114 @@
+﻿@using BioscoopSysteemWebsite.Domain.Entities
+@using System.Collections.Generic
+
+@model List<Show>
+
+@{
+    Show show;
+    ViewBag.Title = "Overview";
+}
+<section id="intro">
+    <div class="container">
+        <div class="introtext">
+            <h1><a href="@Url.Action("Index", "Home")" class="backbtn"> </a>Eerst volgende films</h1>
+            <h1 id="txt"></h1>
+        </div>
+    </div>
+</section>
+<section id="content">
+    <div class="container">
+        <div class="col-md-12">
+                    @for (int x = 0; x < Model.Count - 1; x++ )
+                    {
+                        show = Model[x];
+                        <div id="filmcontent">
+                            <div class="col-md-2">
+                                @if (@show.Movie.ImageData == null)
+                                {
+                                    <img width="150" height="150" src="~/resources/geencover.jpg" />
+                                    <br />
+                                    <br />
+                                    <br />
+                                }
+                                else
+                                {
+                                    <img width="130" height="160" src="/resources/@show.Movie.ImageData" />
+                                    <br />
+                                    <br />
+                                    <br />
+                                }
+                            </div>
+                            <div class="col-md-8">
+                                <div class="row">
+                                    <h3>@show.Movie.Name | @show.StartTime.TimeOfDay</h3>
+                                </div>
+                                <div class="row">
+                                    <p><b>Gesproken taal:</b> @show.Movie.Language</p> <br />
+                                    <p><b>Ondertiteld:</b> @show.Movie.Subtitle</p> <br />
+                                    <p>
+                                        <b>3D:</b>
+                                        @if (@show.Movie.Type == true)
+                                        {
+                                            @:Ja
+                                    }
+                                        else
+                                        {
+                                            @:Nee
+                                    }
+                                    </p><br />
+                                    <p><b>Zaalnummer:</b> @show.Room.RoomNumber</p>
+                                    <br />
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                @if (@show.Room.Accessibility == true)
+                                {
+                                    <img style="height: 50px; width: 50px;" src="~/resources/rolstoel.jpg" />
+                                    <br />
+                                }
+                                else
+                                {
+                                    <img style="height: 50px; width: 50px;" src="~/resources/geenrolstoel.jpg" />
+                                    <br />
+                                }
+                                
+                                @Html.ActionLink("Bestel", "Order", "Home", new { id = @show.ShowID, secretShow = false }, new { @class = "bbbutton" })
+                                <br /><br />
+                            </div>
+                        </div>
+                        <br />
+                    }
+                    
+                    @{show = Model[Model.Count - 1];}
+                    <!--Geheime show-->
+                    <div id="filmcontent">
+                        <div class="col-md-2">
+                            <img width="150" height="150" src="~/resources/geheim.png" />
+                            <br />
+                            <br />
+                            <br />
+                        </div>
+                        <div class="col-md-8">
+                            <div class="row">
+                                <h3>Verrassings film | @show.StartTime.TimeOfDay</h3>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            @if (@show.Room.Accessibility == true)
+                            {
+                                <img style="height: 50px; width: 50px;" src="~/resources/rolstoel.jpg" />
+                                <br />
+                            }
+                            else
+                            {
+                                <img style="height: 50px; width: 50px;" src="~/resources/geenrolstoel.jpg" />
+                                <br />
+                            }
+
+                            @Html.ActionLink("Bestel", "Order", new { id = @show.ShowID, secretShow = true }, new { @class = "bbbutton" }) <br /><br />
+                        </div>
+                    </div>
+                    <br />
+            </div>
+        </div>
+</section>

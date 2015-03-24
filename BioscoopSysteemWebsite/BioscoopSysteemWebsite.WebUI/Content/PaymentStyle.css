@@ -1,0 +1,110 @@
+body {
+	font-family: "arial";
+	background-image: url("~/Resources/backgr.jpg");
+    background-repeat: repeat;
+}
+
+#container {
+	background-color: #fff;
+	width:1024px;
+	margin: 0 auto;
+	height: 500px;
+	box-shadow: 7px 7px 4px #888888;
+	border-radius: 4px;
+}
+
+#rrcontainer {
+    background-image: url('~/Resources/abn_backgr.png');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: right bottom; 
+	background-color: #fff;
+	width:580px;
+	margin: 0 auto;
+	height: 500px;
+	box-shadow: 7px 7px 4px #888888;
+	border-radius: 4px;
+	padding:30px;
+}
+
+input[type="radio"] {
+    float: none;
+    margin: 0;
+    position: relative;
+    top: -40px;
+    width: 20px;
+}
+
+.col_left {
+	float:left;
+}
+
+.col_left ol {
+	margin-left: 15px;
+	background-color: #fff;
+	border:1px solid black;
+	padding: 20px 20px 20px 30px;
+}
+
+.col_left li {
+	margin:5px;
+	background-color: #bdbdbd;
+	border:1px solid black;
+	padding:4px;
+}
+
+.col_right {
+	float:left;
+	margin-left:40px;
+}
+
+.col_right img {
+	margin-right: 20px;
+	height: 100px;
+}
+
+#cc_betalen {
+	height: 50px;
+}
+
+.col_right h1 {
+	border-bottom: 5px solid black;
+}
+
+button {
+	display:       inline-block;
+	padding:       8px 20px;
+	background:    #006000 url('~/Resources/button.png') repeat-x;
+	background:    -moz-linear-gradient(#07b700, #006000);
+	background:    -o-linear-gradient(#07b700, #006000);
+	background:    -webkit-linear-gradient(#07b700, #006000);
+	background:    linear-gradient(#07b700, #006000);
+	border:        1px solid #000;
+	border-radius: 5px;
+	box-shadow:    2px 2px 0 0 #444;
+	color:         #fff;
+	font:          normal 700 24px/1 "Calibri", sans-serif;
+	text-align:    center;
+	text-shadow:   1px 1px 0 #000;
+}
+
+.kies_bank {
+	float:left;
+	margin-bottom:40px;
+}
+
+.kies_bank img {
+	float:left;
+}
+
+.td_bold {
+	font-weight: bold;
+}
+
+td {
+	padding-right: 40px;
+}
+
+input {
+	margin:4px;
+}

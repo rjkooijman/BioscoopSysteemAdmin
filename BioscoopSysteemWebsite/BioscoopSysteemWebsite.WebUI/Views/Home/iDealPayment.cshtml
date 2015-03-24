@@ -1,0 +1,135 @@
+﻿@model BioscoopSysteemWebsite.Domain.Entities.Order
+@{
+    ViewBag.Title = "Betalen met iDeal";
+    Layout = "~/Views/Shared/_LayoutiDeal.cshtml";
+}
+
+
+@if (Session["Language"].Equals(false)) {
+<h1>
+    <img src="@ViewBag.Logo" />
+    Betalen met IDEAL (@ViewBag.Naam)
+</h1>
+<div class="betaal_info">
+    <table>
+        <tr>
+            <td>
+                Begunstigde
+            </td>
+            <td class="td_bold">
+                Avans Cinema B.V.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Omschrijving
+            </td>
+            <td class="td_bold">
+                Betaling via iDeal
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Bedrag
+            </td>
+            <td class="td_bold">
+                @Model.GetTotalPrice()
+            </td>
+        </tr>
+    </table>
+    <div>
+        <h3>Random Reader</h3>
+        Met de S-toets zet u uw digitale handtekening.<br>
+        Ga alleen verder als alles klopt.<br>
+        Ziet u iets ongewoons? Stop en bel 0900 1234.<br>
+
+        <ul>
+            <li>
+                Plaats uw bankpas in de Random Reader
+            </li>
+            <li>
+                Druk op S (signeren)
+            </li>
+            <li>
+                Toets uw pincode in en druk op OK
+            </li>
+            <li>
+                Toets het controlegetal 12345 67890 in en druk op OK
+            </li>
+            <li>
+                Als het totaal van de bedragen klopt, toets dan de twee cijfers voor de komma van het totaal in, druk op OK en nogmaals op OK
+            </li>
+        </ul>
+
+        Klik op bestellen.<br />
+        <div class="submitbtn">
+            @Html.ActionLink("Bestellen", "Paid", new { @Model.OrderId })
+        </div>
+    </div>
+</div>
+
+} else {
+
+<h1>
+    <img src="@ViewBag.Logo" />
+    Payment with IDEAL (@ViewBag.Naam)
+</h1>
+<div class="betaal_info">
+    <table>
+        <tr>
+            <td>
+                Addressed
+            </td>
+            <td class="td_bold">
+                Avans Cinema B.V.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Description
+            </td>
+            <td class="td_bold">
+                Payment with iDeal
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Amount
+            </td>
+            <td class="td_bold">
+                @Model.GetTotalPrice()
+            </td>
+        </tr>
+    </table>
+    <div>
+        <h3>Random Reader</h3>
+        By using the S-button you give your digital signature.<br />
+        Do only proceed if everything is correct.<br />
+        Do you notice something odd? Do not proceed and call 0900 1234<br />
+        <ul>
+            <li>
+                Place your card in the Random Reader
+            </li>
+            <li>
+                Press S (Sign)
+            </li>
+            <li>
+                Enter your pin code and press OK
+            </li>
+            <li>
+                Enter the security number 12345 67890 and press OK
+            </li>
+            <li>
+                If your amount to pay adds up, enter the two numbers before the comma, then press OK twice.
+            </li>
+        </ul>
+
+        Click "order"<br />
+        <div class="submitbtn">
+            @Html.ActionLink("Order", "Paid", new { @Model.OrderId })
+        </div>
+    </div>
+</div>
+}
+
+

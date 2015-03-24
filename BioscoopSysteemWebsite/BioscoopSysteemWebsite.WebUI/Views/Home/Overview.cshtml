@@ -1,0 +1,73 @@
+﻿@using BioscoopSysteemWebsite.Domain.Entities
+@using System.Collections.Generic
+@using System.Globalization
+
+@model Dictionary<Movie, List<Show>>
+
+@{
+    CultureInfo ci;
+    ViewBag.Title = "Overview";
+    if (Session["Language"].Equals(false))
+    {
+        ci = new CultureInfo("nl-NL", false);
+    }
+    else {
+        ci = new CultureInfo("en-US", false);
+    }
+        DateTime vandaag = DateTime.Today.AddDays(ViewBag.SelectId);
+    }
+<section id="intro">
+    <div class="animated bounceInDown introtext">    @if (Session["Language"].Equals(false)) {<h1>Voorstellingen voor:</h1>} else {<h1>Shows for:</h1>}<h3 style="color: white;">@ci.DateTimeFormat.GetDayName(vandaag.DayOfWeek) @vandaag.Day @ci.DateTimeFormat.GetMonthName(vandaag.Month)</h3></div>
+</section>
+<section id="content" style="padding-top: 50px;">
+    <div class="container">
+        @{
+            for (int x = 0; x < 7; x++)
+            {
+                DateTime date = DateTime.Today.AddDays(x);
+                string dag;
+                bool selected = (x == ViewBag.SelectId) ? true : false ;
+                if (Session["Language"].Equals(false))
+                {
+                    switch (x)
+                    {
+                        case 0:
+                            dag = "Vandaag";
+                            break;
+                        case 1:
+                            dag = "Morgen";
+                            break;
+                        default:
+                            dag = ci.DateTimeFormat.GetDayName(date.DayOfWeek);
+                            break;
+                    }
+                }
+                else {
+                    switch (x)
+                    {
+                        case 0:
+                            dag = "Today";
+                            break;
+                        case 1:
+                            dag = "Tomorrow";
+                            break;
+                        default:
+                            dag = ci.DateTimeFormat.GetDayName(date.DayOfWeek);
+                            break;
+                    }
+                }
+                <div id="@((int)date.DayOfWeek)" class="submitbtn timeButton dayButton @(selected ? "selected" : "")" onclick="location.href='@Url.Action("Overview", "Home", new { id = x }, null)'">
+                    @dag
+                </div>
+            }
+        }
+    </div>
+    <br />
+    <div class="container">
+        @if (Model != null && Model.Count > 0) {
+            @Html.Partial("_PartialOverview");
+        } else {
+            @Html.Partial("Empty");
+        }
+    </div>
+</section>

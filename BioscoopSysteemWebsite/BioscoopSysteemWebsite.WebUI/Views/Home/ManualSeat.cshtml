@@ -1,0 +1,281 @@
+﻿@using BioscoopSysteemWebsite.Domain.Entities
+@model Order
+@{
+    ViewBag.Title = "Selecteer uw stoel.";
+}
+
+<section id="intro">
+    <div class="container">
+        <div class="animated bounceInDown introtext">@if (Session["Language"].Equals(false)) { <h1>Selecteer waar je wilt zitten</h1> } else { <h1>Select a seat</h1>}</div>
+    </div>
+</section>
+<section id="ManualSeatSelection">
+        <div id="roomGrid">
+            <div><img class="roomScreem" src="~/Resources/Scherm.png" /></div>
+            <br />
+            <br />
+            <br />
+            <br />
+            @{
+                int seatAmount = Model.Tickets.Count();
+                int maxRowSize = Model.Show.Room.Rows.Max(r => r.SeatAmount);
+                int[][] roomGrid = Model.Show.getFilledRoomGrid();
+
+                for (int y = 0; y < roomGrid.GetLength(0); y++)
+                {<div id="row_@y" class="roomRow">
+                    @for (int x = 0; x < roomGrid[y].Count(); x++)
+                    {<div id="@(y)_@x" class="seatSquare clickableSeat">
+                        @if (roomGrid[y][x] > 0)
+                        {
+                            <img class="seatSquareFilled" src="~/Resources/Seat_filled.png" />
+                        }
+                    </div>}
+                </div>
+                }
+            }
+        </div>
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+    @if (Session["Language"].Equals(false))
+    { 
+           <div id="submitSeats" class="submitbtn">Bevestigen</div> 
+    }
+    else { 
+            <div id="submitSeats" class="submitbtn">Submit</div>
+    }
+</section>
+
+<style>
+    .debug {
+        background-color: green;
+    }
+
+    .gapDebug {
+        background-color: lightblue;
+    }
+</style>
+
+<script>
+    seatAmount = parseInt('@seatAmount');
+    var selectedSeats;
+
+    $('.clickableSeat').click(function () {
+        $selectedSeats = $(".SelectedSeat");
+        $selectedSeats.html('');
+        $selectedSeats.removeClass("SelectedSeat");
+        selectedSeats = [];
+
+        var id = $(this).attr('id');
+        var rowNumber = parseInt(id.split('_')[0]); //Determine the rownumber of the selected seat.
+        var seatNumber = parseInt(id.split('_')[1]); //Determine the collumnnumber of the selected seat.
+        var offset = seatAmount - 1; //Determine the amount off seats besides the selected one.
+        var begin = seatNumber - parseInt(offset / 2); //Calculate the left most seat.
+        var end = seatNumber + parseInt(offset / 2) + offset % 2; //Calculate the right most seat.
+        var maxRowLength = $(this).parent().children().length; //Get the amount of seats in this row.
+
+        //Do some basic boundary control.
+        //If the left most seat exceeds the left boundary of the row change the beginning and end so all seats are inside the row.
+        if (begin <= 0) {
+            begin = 0;
+            end = seatAmount;
+        }
+        //If the right most seat exceeds the right boundary of the row change the beginning and end so all seats are inside the row.
+        if (end >= maxRowLength) {
+            end = maxRowLength;
+            begin = maxRowLength - seatAmount;
+        }
+
+        //Activiate the search logic
+        var result = searchForEmptySpace(seatNumber, rowNumber, seatAmount);
+
+        if (result !== null) {
+            rowNumber = result[0];
+            begin = result[1];
+            end = result[2];
+
+            for (x = begin; x < end + 1; x++) {
+                $('#' + rowNumber + '_' + (x)).html('<img class="seatSquareFilled" src="/Resources/Seat_choosen.png" />');
+                $('#' + rowNumber + '_' + (x)).addClass("SelectedSeat");
+                selectedSeats.push(rowNumber + '_' + (x));
+            }
+        }
+        else {
+            alert("Selecteer alstublieft een locatie met genoeg plaatsen.");
+        }
+    })
+
+    $('#submitSeats').click(function () {
+        if (selectedSeats !== 'undefined' || selectedSeats.length > 0) {
+            var inputString = "";
+            for (var x = 0; x < selectedSeats.length; x++) {
+                inputString += "<input type='hidden' name='seat' value='" + selectedSeats[x] + "'>";
+            }
+
+            $('<form action="@Url.Action("ManualSeatSelection", "Home")">' + inputString + '</form>').appendTo('body').submit();
+        }
+        else {
+            alert("Geen stoelen geselecteerd.");
+        }
+    })
+
+
+
+    function searchForEmptySpace(SelectedSeatNumber, SelectedRowNumber, seatAmount) {
+        //Coordinates of the selected seat
+        var begin;
+        var end;
+        var minGapLength = 2;
+        var seatNumber = SelectedSeatNumber;
+        var rowNumber = SelectedRowNumber;
+        var seatsLeftOfCenter = parseInt((seatAmount - 1) / 2);
+        var seatsRightOfCenter = parseInt((seatAmount - 1) / 2 + (seatAmount - 1) % 2);
+        var seatOffset;
+        var rowOffset = 0;
+        var noRowsLeft = false;
+        var noSeatsLeft = false;
+        var seatsFound = false;
+        var upward = true;
+        var left;
+        var maxRowNumber = $('#roomGrid').children('.roomRow').length;
+
+
+        while (seatsFound === false && noRowsLeft === false) {
+            switch (upward) {
+                case true:
+                    rowNumber = SelectedRowNumber + rowOffset;
+                    upward = false;
+                    break;
+                case false:
+                    rowNumber = SelectedRowNumber - rowOffset;
+                    rowOffset++;
+                    upward = true;
+                    break;
+            }
+            $row = $('#row_' + rowNumber);
+            if ($row.length === 1) {
+
+                var maxSeatNumber = $row.children('.seatSquare').length;
+
+                noSeatsLeft = false;
+                begin = seatNumber - seatsLeftOfCenter;
+                end = seatNumber + seatsRightOfCenter;
+
+                var gapResults = checkGap(begin, end, rowNumber, minGapLength);
+                seatOffset = gapResults[1];
+                left = Boolean(gapResults[0]);
+
+                var x = 0;
+                while (seatsFound === false && noSeatsLeft === false) {
+                    switch (left) {
+                        case true:
+                            seatNumber = SelectedSeatNumber - seatOffset;
+                            begin = seatNumber - seatsLeftOfCenter;
+                            end = seatNumber + seatsRightOfCenter;
+
+                            if (seatNumber - seatsLeftOfCenter >= 0) {
+                                seatsFound = checkIfRangeIsFree(begin, end, rowNumber);
+                            }
+
+                            left = false;
+                            break;
+                        case false:
+                            seatNumber = SelectedSeatNumber + seatOffset;
+                            begin = seatNumber - seatsLeftOfCenter;
+                            end = seatNumber + seatsRightOfCenter;
+
+                            if (seatNumber + seatsRightOfCenter < maxSeatNumber) {
+                                seatsFound = checkIfRangeIsFree(begin, end, rowNumber);
+                            }
+
+                            left = true;
+                            break;
+                    }
+
+                    if (seatsFound == true) {
+                        var gapResults = checkGap(begin, end, rowNumber, minGapLength);
+                        if (gapResults[1] == 0) {
+
+                        }
+                        else {
+                            seatOffset += gapResults[1];
+                            left = Boolean(gapResults[0]);
+                            seatsFound = false;
+                        }
+                        
+                    }
+
+                    if (seatOffset > maxSeatNumber) {
+                        noSeatsLeft = true;
+                    }
+
+                    if (x == 1) {
+                        seatOffset++;
+                        x = 0;
+                    }
+                    else {
+                        x++;
+                    }
+                }
+            }
+
+            if (rowOffset > maxRowNumber) {
+                noRowsLeft = true;
+            }
+        }
+
+        if (seatsFound === true) {
+            var seatData = [rowNumber, begin, end];
+            return seatData;
+        } else {
+            return null;
+        }
+    }
+
+    //Checks if the selection is according the gap rules (adjacent or at least 2 empty seats) and return an offset modifier. Returns an array containing a boolean and a integer.
+    function checkGap(begin, end, rowNumber, minGapLength) {
+        var left = 1;
+        var offsetModifier = 0;
+
+        for (var x = 1; x <= minGapLength; x++) {
+            /*$('.gapDebug').removeClass('gapDebug');
+            $('#' + rowNumber + '_' + (begin - x)).addClass('gapDebug');
+            $('#' + rowNumber + '_' + (end + x)).addClass('gapDebug');*/
+
+            if ($('#' + rowNumber + '_' + (begin - x)).children().length > 0 || $('#' + rowNumber + '_' + (begin - x)).length === 0) {
+                left = 1;
+                offsetModifier = (x - 1);
+                break;
+            } else if ($('#' + rowNumber + '_' + (end + x)).children().length > 0 || $('#' + rowNumber + '_' + (end + x)).length === 0) {
+                left = 0;
+                offsetModifier = (x - 1);
+                break;
+            }
+        }
+
+        return [left, offsetModifier];
+    }
+
+    function checkIfRangeIsFree(begin, end, rowNumber, checkForGap, minGapLength) {
+        var spaceEnough = true;
+
+        //Visual debug code, comment this for-loop out while this code is in production.
+        /*$('.debug').removeClass('debug');
+        for (var x = begin; x <= end; x++) {
+            var $element = $('#' + rowNumber + '_' + (x));
+            $element.addClass("debug");
+        }*/
+
+        for (var x = begin; x <= end; x++) {
+
+            var $element = $('#' + rowNumber + '_' + (x));
+            if ($element.length === 0 || $element.children().length > 0) {
+                spaceEnough = false;
+                break;
+            }
+        }
+        return spaceEnough;
+    }
+</script>

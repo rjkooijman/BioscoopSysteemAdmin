@@ -1,0 +1,222 @@
+﻿<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Avans Cinema - @ViewBag.Title</title>
+    <link rel="icon" type="image/png" href="~/Resources/icon.png" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet">
+    <link href="~/Content/Site.css" rel="stylesheet">
+    <link href="~/Content/animate.css" rel="stylesheet" />
+    <link href="~/fonts/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABLepzriIlpSJblsjtjX-ZPh9Crt_ZHjM&sensor=false">        //Key van Frank Molengraaf</script>
+    <script src="~/Scripts/jquery.js"></script>
+    <style>
+        #filmbanner{
+            background-image: url('/Resources/@ViewBag.FilmBannerPath');
+            background-position: fixed;
+            margin: 0 auto;
+            width: 100%;
+            height: 60vh;
+            position: relative;
+            text-align: center;
+            padding: 100px 0;
+            background-size: cover;
+        }
+        #filmbanner h1{
+            top: 150px;
+        }
+    </style>
+</head>
+<body id="page-top" class="index">
+    <!-- Begin Menu -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <img src='@Url.Content("~/Resources/logo.png")' class="desktop-only-logo" style="width: 69%;" />
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        @if (Session["Language"].Equals(false))
+                        {
+                            @Html.ActionLink("Hoofdpagina", "Index")
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Home", "Index")
+                        }
+                    </li>
+                    <li>
+                        @if (Session["Language"].Equals(false))
+                        {
+                            @Html.ActionLink("Voorstellingen", "Overview", new { id = 0 }, null)
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Shows", "Overview", new { id = 0 }, null)
+                        }
+                    </li>
+                    <li>
+                        @Html.Partial("_PartialSearch")
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Einde Menu -->
+    <!-- Begin Content -->
+    @RenderBody()
+    <!-- Einde Content -->
+    <!-- Begin Footer -->
+    <footer class="text-center">
+        <div class="subfooter">
+            <div class="container">
+                <div class="col-md-4">
+                    <div id="row">
+                        <h2>Contact</h2>
+                        <p>Lovensdijkstraat 61-63</p>
+                        <p>4818 AJ Breda</p>
+                        @if (Session["Language"].Equals(false)){
+                            <p>076 977 4478</p>
+                            <a href="http://goo.gl/FsZq9Q">Routebeschrijving</a>
+                        } else { 
+                            <p>The Netherlands</p>
+                            <p>+31 76 977 4478</p>
+                            <a href="http://goo.gl/FsZq9Q">Directions</a>
+                        }
+                    </div>
+                </div>
+                <div class="col-md-4 desktop-only">
+                    <div id="row">
+                        <h2>Social Media</h2>
+                        <a href="https://www.facebook.com/avanscinema" target="_blank" class="social-popout"><img src="~/Resources/facebook.png" /></a>
+                        <a href="http://www.twitter.com/avanscinema" target="_blank" class="social-popout"><img src="~/Resources/twitter.png" /></a>
+                        <a href="http://www.filmtotaal.nl/bioscoopagenda.php?stad=19" target="_blank" class="social-popout"><img src="~/Resources/biosagenda.png" /></a>
+                    </div>
+                </div>
+                <div class="col-md-4 mobile-only">
+                    <div id="row">
+                        <div class="socialmediatxt">
+                            <h2>Social Media</h2>
+                            <a href="https://www.facebook.com/avanscinema" target="_blank">Facebook</a> <br />
+                            <a href="http://www.twitter.com/avanscinema" target="_blank">Twitter</a> <br />
+                            <a href="http://www.filmtotaal.nl/bioscoopagenda.php?stad=19" target="_blank">Bioscoopagenda</a> <br />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div id="row">
+                        @if (Session["Language"].Equals(false)) {
+                            <h2>Nieuwsbrief</h2>
+                            <p>
+                                @ViewBag.email
+                            </p>
+                            using (Html.BeginForm("Newsletter", "Home")) {
+                                <div id="newsletter">
+                                    <form>
+                                        <input type="text" name="emailadres" placeholder="Uw mailadres" />
+                                        <input class="newsletterbtn" type="submit" value="Inschrijven" />
+                                    </form>
+                                </div>
+                            }
+                        } else {
+                            <h2>Newsletter</h2>
+                            <p>
+                                @ViewBag.email
+                            </p>
+                            using (Html.BeginForm("Newsletter", "Home")) {
+                                <div id="newsletter">
+                                    <form>
+                                        <input type="text" name="emailadres" placeholder="Your e-mail" />
+                                        <input class="newsletterbtn" type="submit" value="Register" />
+                                    </form>
+                                </div>
+                            }
+                        }
+                        <br />
+                    </div>
+                    <div id="row">
+                        @if (Session["Language"].Equals(false))
+                        {
+                            <h3>Selecteer een taal</h3>
+                            <div id="language">
+                                @using (Html.BeginForm("changeLanguage", "Home"))
+                                {
+                                    @Html.DropDownList("Language", new SelectListItem[]{
+                                        new SelectListItem() {Text = "Nederlands", Value="nl"},
+                                        new SelectListItem() {Text = "Engels", Value="en"}})
+                                    <input class="languagebtn" type="submit" value="Selecteer" />
+                                }
+                             </div>
+                        } else {
+                            <h3>Choose a language</h3>
+                            <div id="language">
+                                @using (Html.BeginForm("changeLanguage", "Home"))
+                                {
+                                    @Html.DropDownList("Language", new SelectListItem[]{
+                                        new SelectListItem() {Text = "English", Value="en"},
+                                        new SelectListItem() {Text = "Dutch", Value="nl"}})
+                                    <input class="languagebtn" type="submit" value="Select" />
+                                }
+                            </div>
+                        }
+                         <br />
+                    </div>  
+                </div>
+            </div>
+        </div>
+        <div class="footer-copy">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        &copy; 23IVH7A3 - @DateTime.Now.Year
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Einde Footer -->
+    <!-- Begin Page-Top Scroller-->
+    <div class="scroll-top page-scroll visible-xs visble-sm">
+        <a class="btn btn-primary" href="#page-top">
+            <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+    <!-- Eind Page-Top Scroller-->
+    <!-- Begin Scripts-->
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+    <script src="~/Scripts/main.js"></script>
+    <script src="~/Scripts/jquery.slides.min.js"></script>
+    <script>
+        $(function () {
+            $('#slides').slidesjs({
+                width: 940,
+                height: 528,
+                play: {
+                    active: true,
+                    auto: true,
+                    interval: 3000,
+                    swap: true
+                },
+                navigation: false
+            });
+        });
+    </script>
+    <!-- Eind Scripts-->
+</body>
+</html>

@@ -1,0 +1,35 @@
+﻿@model BioscoopSysteemWebsite.Domain.Entities.Order
+
+@{
+    ViewBag.Title = "Payment";
+}
+<section id="intro">
+    <div class="container">
+        <div class="introtext">
+            <h1><a href="@Url.Action("Index", "Home")" class="backbtn"> </a>Betaling</h1>
+            <h1 id="txt"></h1>
+        </div>
+    </div>
+</section>
+<section id="content">
+    <div class="container">
+        <div class="filmorder">
+            <div class="col-md-12">
+                <p>
+                    U dient &#8364 @Model.GetTotalPrice() te voldoen<br>
+                    U heeft @Model.Tickets.Count() kaartjes gekocht.<br>
+                    <br>
+                    Volg de instructies op de betaal-automaat
+                </p>
+                <div class="btn-success">
+                    @Html.ActionLink("Betaal", "Pay", "Home", new { Model.OrderId }, null)
+
+                </div>
+            </div>
+           </div>
+        </div>
+</section>
+
+
+
+

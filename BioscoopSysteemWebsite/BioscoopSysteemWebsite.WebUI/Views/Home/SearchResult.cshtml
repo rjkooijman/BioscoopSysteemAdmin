@@ -1,0 +1,19 @@
+﻿@using BioscoopSysteemWebsite.Domain.Entities
+@using System.Collections.Generic
+
+@{
+    ViewBag.Title = "SearchResults";
+}
+<section id="intro">
+    <div class="animated bounceInDown introtext">
+        <h1>
+            @ViewBag.NoResult
+            @ViewBag.Result
+        </h1>
+    </div>
+</section>
+<section id="content">
+    <div class="container">
+        @Html.Partial("_PartialOverview")
+    </div>
+</section>

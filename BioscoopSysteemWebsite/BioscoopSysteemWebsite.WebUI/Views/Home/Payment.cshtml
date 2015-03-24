@@ -1,0 +1,25 @@
+﻿@model BioscoopSysteemWebsite.Domain.Entities.Order
+@{
+    ViewBag.Title = "Payment";
+}
+
+<section id="intro">
+    <div class="animated bounceInDown introtext">
+            @if (Session["Language"].Equals(false)) { <h1>Maak uw keuze</h1>} else { <h1>Make a choice</h1> }
+    </div>
+</section>
+<section id="content">
+    <div class="container">
+        @if (Session["Language"].Equals(false)) {
+            <div class="paybtn">@Html.ActionLink("Reserveren", "Reserved", new { Model.OrderId }, null)</div>
+            <div class="paybtn">@Html.ActionLink("Betalen met Credit Card", "CreditCardPayment", new { Model.OrderId }, null)</div>
+            <div class="paybtn">@Html.ActionLink("Betalen met iDeal", "iDealChooseBank", new { Model.OrderId }, null)</div>
+        }
+        else
+        {
+            <div class="paybtn">@Html.ActionLink("Reservation", "Reserved", new { Model.OrderId }, null)</div>
+            <div class="paybtn">@Html.ActionLink("Payment with Credit Card", "CreditCardPayment", new { Model.OrderId }, null)</div>
+            <div class="paybtn">@Html.ActionLink("Payment with iDeal", "iDealChooseBank", new { Model.OrderId }, null)</div>
+        }
+    </div>
+</section>

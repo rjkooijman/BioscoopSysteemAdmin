@@ -1,0 +1,64 @@
+﻿@{
+    string zoekZichtbaarString;
+    string zoekNietZichtbaarString;
+}
+@if (Session["Language"].Equals(false)) {
+    zoekZichtbaarString = "Zoek";
+    zoekNietZichtbaarString = "Open zoekvenster";
+    
+    using (Html.BeginForm("Index", "Home", FormMethod.Post)) {
+        <div id="search">
+            <form>
+                <span class="searchBody" style="display: none;">
+                    <label>Dag: </label>@Html.DropDownList("playDay", null, new { placeholder = "Selecteer een dag" })
+                    <label>Titel: </label>@Html.TextBox("SearchString", null, new { placeholder = "Film titel" })
+                    <label>Tijd: </label>@Html.DropDownList("SearchTime", null, new { placeholder = "Selecteer een tijd" })
+                </span>
+                <input id="zoekKnop" class="searchbtn " type="submit" value="@zoekNietZichtbaarString">
+            </form>
+        </div>
+    }
+} else {
+    zoekZichtbaarString = "Search";
+    zoekNietZichtbaarString = "Open search";
+    
+    using (Html.BeginForm("Index", "Home", FormMethod.Post))
+    {
+        <div id="search">
+            <form>
+                <span class="searchBody" style="display: none;">
+                    <label>Day: </label>@Html.DropDownList("playDay", null, new { placeholder = "Day" })
+                    <label>Title: </label>@Html.TextBox("SearchString", null, new { placeholder = "Title" })
+                    <label>Time: </label>@Html.DropDownList("SearchTime", null, new { placeholder = "Time" })
+                </span>
+                <input id="zoekKnop" class="searchbtn" type="submit" value="@zoekNietZichtbaarString">
+            </form>
+        </div>
+    }
+}
+
+
+<script type="text/javascript">
+    $('#zoekKnop').click(function (event) {
+        if ($('.searchBody').is(':visible')) {
+
+        } else {
+            event.preventDefault();
+            $('#zoekKnop').val("@zoekZichtbaarString");
+            $('.searchBody').fadeIn(200, function () {
+            });
+        }
+
+        event.stopPropagation();
+    })
+
+    $('.searchBody').click(function (event){
+        event.stopPropagation();
+    })
+
+    $('.navbar').click(function () {
+        $('.searchBody').fadeOut(200, function () {
+            $('#zoekKnop').val("@zoekNietZichtbaarString");
+        });
+    })
+</script>

@@ -1,0 +1,139 @@
+﻿@using BioscoopSysteemWebsite.Domain.Entities
+@model BioscoopSysteemWebsite.Domain.Entities.Order
+@{
+    ViewBag.Title = "Reserved";
+}
+
+@{
+    if (Session["Language"].Equals(false))
+    {
+        
+        try
+        {
+            if (@Model.Paid) { 
+            System.Net.Mail.MailMessage myMail = new System.Net.Mail.MailMessage();
+            System.Net.Mail.SmtpClient SmtpServer = new System.Net.Mail.SmtpClient("smtp.gmail.com");
+            myMail.From = new System.Net.Mail.MailAddress("rkooijma1@avans.nl");
+            myMail.To.Add(@Model.Email);
+            myMail.Subject = "Bestelgegevens";
+            myMail.IsBodyHtml = true;
+
+
+            myMail.Body = "U heeft " + Model.Tickets.Count().ToString() + " tickets besteld voor " + Model.Show.Movie.Name + " voor de voorstelling op " + Model.Show.StartTime.Day + "-" + Model.Show.StartTime.Month + "-" + Model.Show.StartTime.Year +
+                " om " + Model.Show.StartTime.TimeOfDay.ToString() +
+                "<br />" + "Uw reserveringscode is " + Model.OrderId.ToString() +
+                "<br />" + "U heeft al wel betaald";
+            string[] fileNames = new string[@Model.Tickets.Count()];
+            System.Net.Mail.Attachment attachment = null;
+            foreach (Ticket ticket in @Model.Tickets)
+            {
+                for (int i = 0; i < @Model.Tickets.Count(); i++)
+                {
+                    fileNames[i] = @"C:\AvansCinemaTickets\ticket" + Model.OrderId.ToString() + ticket.TicketId.ToString() + ".pdf";
+                    attachment = new System.Net.Mail.Attachment(fileNames[i]);
+                }
+                myMail.Attachments.Add(attachment);
+            }
+
+            SmtpServer.Port = 587;
+            SmtpServer.Credentials = new System.Net.NetworkCredential("rkooijma1@avans.nl", "CarpoAnt!th3us");
+            SmtpServer.EnableSsl = true;
+
+            SmtpServer.Send(myMail);
+        } else {
+        System.Net.Mail.MailMessage myMail = new System.Net.Mail.MailMessage();
+            System.Net.Mail.SmtpClient SmtpServer = new System.Net.Mail.SmtpClient("smtp.gmail.com");
+            myMail.From = new System.Net.Mail.MailAddress("rkooijma1@avans.nl");
+            myMail.To.Add(@Model.Email);
+            myMail.Subject = "Bestelgegevens";
+            myMail.IsBodyHtml = true;
+
+            myMail.Body = "U heeft " + Model.Tickets.Count().ToString() + " tickets besteld voor " + Model.Show.Movie.Name + " voor de voorstelling op " + Model.Show.StartTime.Day + "-" + Model.Show.StartTime.Month + "-" + Model.Show.StartTime.Year +
+                " om " + Model.Show.StartTime.TimeOfDay.ToString() +
+                "<br />" + "Uw reserveringscode is " + Model.OrderId.ToString() +
+                "<br />" + "U heeft nog niet betaald";
+            SmtpServer.Port = 587;
+            SmtpServer.Credentials = new System.Net.NetworkCredential("rkooijma1@avans.nl", "CarpoAnt!th3us");
+            SmtpServer.EnableSsl = true;
+
+            SmtpServer.Send(myMail);
+        }
+        }
+        catch (Exception)
+        {
+            @:<b>Het was helaas niet mogelijk om de bevestiging te versturen.</b>
+        }
+   
+    } else {
+        
+        try
+        {
+            if (@Model.Paid) {
+            System.Net.Mail.MailMessage myMail = new System.Net.Mail.MailMessage();
+            System.Net.Mail.SmtpClient SmtpServer = new System.Net.Mail.SmtpClient("smtp.gmail.com");
+            myMail.From = new System.Net.Mail.MailAddress("rkooijma1@avans.nl");
+            myMail.To.Add(@Model.Email);
+            myMail.Subject = "Order details";
+            myMail.IsBodyHtml = true;
+
+            myMail.Body = "You have ordered " + Model.Tickets.Count().ToString() + " tickets for " + Model.Show.Movie.Name + " for the show on " + Model.Show.StartTime.Day + "-" + Model.Show.StartTime.Month + "-" + Model.Show.StartTime.Year +
+                " at " + Model.Show.StartTime.TimeOfDay.ToString() +
+                "<br />" + "Your reservationcode is " + Model.OrderId.ToString() +
+                "<br />" + "You have already paid.";
+            string[] fileNames = new string[@Model.Tickets.Count()];
+            System.Net.Mail.Attachment attachment = null;
+            foreach (Ticket ticket in @Model.Tickets)
+            {
+                for (int i = 0; i < @Model.Tickets.Count(); i++)
+                {
+                    fileNames[i] = @"C:\Users\Frank\Desktop\Tickets\ticket" + Model.OrderId.ToString() + ticket.TicketId.ToString() + ".pdf";
+                    attachment = new System.Net.Mail.Attachment(fileNames[i]);
+                }
+                myMail.Attachments.Add(attachment);
+            }
+
+            SmtpServer.Port = 587;
+            SmtpServer.Credentials = new System.Net.NetworkCredential("rkooijma1@avans.nl", "CarpoAnt!th3us");
+            SmtpServer.EnableSsl = true;
+
+            SmtpServer.Send(myMail);
+        } else {
+            System.Net.Mail.MailMessage myMail = new System.Net.Mail.MailMessage();
+            System.Net.Mail.SmtpClient SmtpServer = new System.Net.Mail.SmtpClient("smtp.gmail.com");
+            myMail.From = new System.Net.Mail.MailAddress("rkooijma1@avans.nl");
+            myMail.To.Add(@Model.Email);
+            myMail.Subject = "Order details";
+            myMail.IsBodyHtml = true;
+
+            myMail.Body = "You have ordered " + Model.Tickets.Count().ToString() + " tickets for " + Model.Show.Movie.Name + " for the show on " + Model.Show.StartTime.Day + "-" + Model.Show.StartTime.Month + "-" + Model.Show.StartTime.Year +
+                " at " + Model.Show.StartTime.TimeOfDay.ToString() +
+                "<br />" + "Your reservationcode is " + Model.OrderId.ToString() +
+                "<br />" + "You haven't paid yet.";
+        }
+        }           
+        catch (Exception)
+        {
+            @:<b>Unfortunately, it wasn't possible to send the confirmation.</b>
+        }
+    }
+}
+<section id="intro">
+    <div class="animated bounceInDown introtext">    
+        @if (Session["Language"].Equals(false)){
+            <h1>Bedankt voor uw reservering!</h1>
+        } else {
+            <h1>Thank you for your reservation!</h1>
+        }
+    </div>
+</section>
+<section id="content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <p>@ViewBag.paid</p>
+                <p>Het totaalbedrag is : €@ViewBag.totalPrice</p>
+            </div>
+        </div>
+    </div>
+</section>
+

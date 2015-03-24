@@ -1,0 +1,40 @@
+﻿@{
+    ViewBag.Title = "Geen films gevonden!";
+}
+<section id="content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                @if (Session["Language"].Equals(false)) {
+                    <h2>Er zijn geen voorstellingen gevonden.</h2>
+                }
+                else
+                {
+                    <h2>No shows found.</h2>
+                }
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                    @if (Session["Language"].Equals(false)) {
+                    <p>Probeer het later nogmaals of neem contact op met Avans Cinema met onderstaande gegevens:</p> <br />
+                    }
+                    else { 
+                    <p>Please try again later or contact Avans Cinema:</p>}
+                    <p>Avans Cinema Breda</p>
+                    <p>Lovensdijkstraat 61-63</p>
+                    <p>4818 AJ Breda</p>
+                    @if (Session["Language"].Equals(false))
+                    {
+                        <p>076 977 4478</p>
+                    }
+                    else
+                    {
+                        <p>The Netherlands</p>
+                        <p>+31 76 977 4478</p>
+                    }
+            </div>
+        </div>
+    </div>
+</section>
+

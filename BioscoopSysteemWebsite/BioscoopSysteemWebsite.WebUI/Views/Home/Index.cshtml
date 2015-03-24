@@ -1,0 +1,335 @@
+﻿@using BioscoopSysteemWebsite.Domain.Entities
+@model List<BioscoopSysteemWebsite.Domain.Entities.Show>
+
+@{
+    ViewBag.Title = "Index";
+}
+<script type="text/javascript">
+    //Als het frame geladen is, wordt de map gecreërd.
+    google.maps.event.addDomListener(window, 'load', init);
+    function init() {
+        var mapOptions = {
+            zoom: 16,
+            zoomControl: false,
+            scaleControl: false,
+            scrollwheel: false,
+            // Coördinaten
+            center: new google.maps.LatLng(51.58563, 4.79381), // Lovensdijkstraat 63 Breda
+            styles: [
+                        {
+                            "featureType": "all",
+                            "elementType": "all",
+                            "stylers": [
+                                {
+                                    "visibility": "simplified"
+                                },
+                                {
+                                    "saturation": "-100"
+                                },
+                                {
+                                    "invert_lightness": true
+                                },
+                                {
+                                    "lightness": "11"
+                                },
+                                {
+                                    "gamma": "1.27"
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "administrative.locality",
+                            "elementType": "all",
+                            "stylers": [
+                                {
+                                    "visibility": "off"
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "landscape.man_made",
+                            "elementType": "all",
+                            "stylers": [
+                                {
+                                    "hue": "#ff0000"
+                                },
+                                {
+                                    "visibility": "simplified"
+                                },
+                                {
+                                    "invert_lightness": true
+                                },
+                                {
+                                    "lightness": "-10"
+                                },
+                                {
+                                    "gamma": "0.54"
+                                },
+                                {
+                                    "saturation": "45"
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "poi.business",
+                            "elementType": "all",
+                            "stylers": [
+                                {
+                                    "visibility": "simplified"
+                                },
+                                {
+                                    "hue": "#ff0000"
+                                },
+                                {
+                                    "saturation": "75"
+                                },
+                                {
+                                    "lightness": "24"
+                                },
+                                {
+                                    "gamma": "0.70"
+                                },
+                                {
+                                    "invert_lightness": true
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "poi.government",
+                            "elementType": "all",
+                            "stylers": [
+                                {
+                                    "hue": "#ff0000"
+                                },
+                                {
+                                    "visibility": "simplified"
+                                },
+                                {
+                                    "invert_lightness": true
+                                },
+                                {
+                                    "lightness": "-24"
+                                },
+                                {
+                                    "gamma": "0.59"
+                                },
+                                {
+                                    "saturation": "59"
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "poi.medical",
+                            "elementType": "all",
+                            "stylers": [
+                                {
+                                    "visibility": "simplified"
+                                },
+                                {
+                                    "invert_lightness": true
+                                },
+                                {
+                                    "hue": "#ff0000"
+                                },
+                                {
+                                    "saturation": "73"
+                                },
+                                {
+                                    "lightness": "-24"
+                                },
+                                {
+                                    "gamma": "0.59"
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "poi.park",
+                            "elementType": "all",
+                            "stylers": [
+                                {
+                                    "lightness": "-41"
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "poi.school",
+                            "elementType": "all",
+                            "stylers": [
+                                {
+                                    "visibility": "simplified"
+                                },
+                                {
+                                    "hue": "#ff0000"
+                                },
+                                {
+                                    "invert_lightness": true
+                                },
+                                {
+                                    "saturation": "43"
+                                },
+                                {
+                                    "lightness": "-16"
+                                },
+                                {
+                                    "gamma": "0.73"
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "poi.sports_complex",
+                            "elementType": "all",
+                            "stylers": [
+                                {
+                                    "hue": "#ff0000"
+                                },
+                                {
+                                    "saturation": "43"
+                                },
+                                {
+                                    "lightness": "-11"
+                                },
+                                {
+                                    "gamma": "0.73"
+                                },
+                                {
+                                    "invert_lightness": true
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "road",
+                            "elementType": "all",
+                            "stylers": [
+                                {
+                                    "saturation": "45"
+                                },
+                                {
+                                    "lightness": "53"
+                                },
+                                {
+                                    "gamma": "0.67"
+                                },
+                                {
+                                    "invert_lightness": true
+                                },
+                                {
+                                    "hue": "#ff0000"
+                                },
+                                {
+                                    "visibility": "simplified"
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "road",
+                            "elementType": "labels",
+                            "stylers": [
+                                {
+                                    "visibility": "off"
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "transit",
+                            "elementType": "all",
+                            "stylers": [
+                                {
+                                    "visibility": "simplified"
+                                },
+                                {
+                                    "hue": "#ff0000"
+                                },
+                                {
+                                    "saturation": "38"
+                                },
+                                {
+                                    "lightness": "-16"
+                                },
+                                {
+                                    "gamma": "0.86"
+                                }
+                            ]
+                        }
+            ]
+        };
+
+        var mapElement = document.getElementById('map');
+        var map = new google.maps.Map(mapElement, mapOptions);
+        var marker = new google.maps.Marker({
+            position: new google.maps.LatLng(51.58563, 4.79381),
+            map: map,
+            title: "Avans Cinema"
+        });
+    }
+</script>
+<section id="slides">
+    @foreach (Show show in Model) {
+        if (@show.Movie.BannerImage != null) {
+            <a href="@Url.Action("Order", "Home", new { id = show.ShowID })"><img src="~/Resources/@show.Movie.BannerImage"></a>
+        }
+    }
+</section>
+
+@if (Session["Language"].Equals(false)) {
+    <section id="about">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h1>Welkom!</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <p>
+                        Avans Cinema is de grootste bioscoop van de Benelux, gelegen in Breda. Bij Avans Cinema staan geluidskwaliteit en beeldkwaliteit hoog op de lijst van prioriteiten. Het is daarom dat u bij Avans Cinema de beste kijkerservaring kunt beleven. Met onder andere iMax, 3D en 2D zalen, waarvan meer dan de helft toegankelijk is voor rolstoelgebruikers
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <h3>Openingstijden:</h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <p>Maandag t/m vrijdag: 15:00 t/m 00:00</p>
+                    <p>Zaterdag: 12:00 t/m 01:00</p>
+                    <p>Zondag: 12:00 t/m 21:00</p>
+                    <br />
+                </div>
+            </div>
+        </div>
+    </section>
+} else {
+    <section id="about">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h1>Welcome!</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <p>
+                        Avans Cinema is the biggest cinema of Belgium, Luxembourg and the Netherlands. Avans Cinema is located in Breda. At Avans Cinema, sound and image quality are the biggest priorities. It is therefore that Avans Cinema can offer you the best viewer experience. With iMax, 3D and 2D rooms, whereof more than half is accessible for wheelchairs.
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <h3>Opening hours:</h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <p>Monday to Friday: 15:00 - 00:00</p>
+                    <p>Saturday: 12:00 - 01:00</p>
+                    <p>Sunday: 12:00 - 21:00</p>
+                    <br />
+                </div>
+            </div>
+        </div>
+    </section>
+}
+<section id="map"></section>
+
