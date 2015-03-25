@@ -20,6 +20,8 @@ namespace BioscoopSysteemAdmin.WebUI.Controllers {
         public ActionResult VoorstellingToevoegen() {
             List<Movie> moviesList = repo.GetAllMovies().Where(m => m.StartDate < DateTime.Now && m.EndDate > DateTime.Now).ToList();
             List<Room> roomList = repo.GetAllRooms().ToList();
+            List<LadiesNight> ladiesNightList = repo.GetAllLadiesNights().Where(l => l.LadiesNightDay.DayOfYear > DateTime.Now.DayOfYear).ToList();
+            List<Show> showList = repo.GetAllShows().Where(s => s.StartTime > DateTime.Now).ToList();
             List<SelectListItem> roomListSelect = new List<SelectListItem>();
             List<SelectListItem> movieListSelect = new List<SelectListItem>();
             SelectListItem x = null;
@@ -35,9 +37,32 @@ namespace BioscoopSysteemAdmin.WebUI.Controllers {
                 }
                 roomListSelect.Add(x);
             }
+
+            ViewBag.showList = showList;
+            ViewBag.ladiesNightSelect = ladiesNightList;
             ViewBag.RoomSelect = roomListSelect;
             ViewBag.MovieSelect = movieListSelect;
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult VoorstellingToevoegen(Show show) {
+            DateTime date = DateTime.Parse(Request["datum"]);
+            DateTime newDate = date.Add(TimeSpan.Parse(Request["starttijd"]));
+            show.StartTime = newDate;
+            show.Movie = repo.GetMovieById(show.MovieId);
+            show.Room = repo.GetRoomById(show.RoomId);
+            if (repo.GetLadiesNightByDate(newDate) == null) {
+                show.LadiesNight = null;
+            } else {
+                show.LadiesNight = repo.GetLadiesNightByDate(newDate);
+                show.LadiesNightid = show.LadiesNight.LadiesNightid;
+            }
+            
+
+            repo.AddShow(show);
+
+            return View("Index", "Home");
         }
     }
 }

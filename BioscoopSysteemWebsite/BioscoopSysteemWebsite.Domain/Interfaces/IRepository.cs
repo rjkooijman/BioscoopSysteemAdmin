@@ -58,5 +58,15 @@ namespace BioscoopSysteemWebsite.Domain.Interfaces {
         User GetUserById(int id);
 
         IEnumerable<Room> GetAllRooms();
+
+        IEnumerable<LadiesNight> GetAllLadiesNights();
+
+        void AddShow(Show show);
+        
+        Movie GetMovieById(int id);
+
+        Room GetRoomById(int id);
+
+        LadiesNight GetLadiesNightByDate(DateTime date);
     }
 }

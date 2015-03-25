@@ -1,26 +1,52 @@
 ﻿@model BioscoopSysteemWebsite.Domain.Entities.Show
 @using BioscoopSysteemWebsite.Domain.Entities
 @{
+    List<Show> showList = ViewBag.showList;
     List<SelectListItem> movieListSelect = ViewBag.MovieSelect;
     List<SelectListItem> roomListSelect = ViewBag.RoomSelect;
+    List<LadiesNight> ladiesNightList = ViewBag.ladiesNightList;
     ViewBag.Title = "Voorstelling toevoegen";
 }
-<script>
+<script type="text/javascript">
+    $(document).ready(function () {
 
+        $('#ladies').change(function () {
+            if (this.checked) {
+
+                $('#ladiesnight').fadeIn('fast').css("display", "inline-block");
+                $('select#ladiesnight').fadeIn('fast').css("display", "inline-block");
+            } else {
+                $('#ladiesnight').fadeOut('fast');
+                $('select#ladiesnight').fadeOut('fast');
+
+            }
+        })
+    });
 </script>
 <h2>VoorstellingToevoegen</h2>
 <div class="container">
+    @using (Html.BeginForm("VoorstellingToevoegen", "Planner", FormMethod.Post)) {
     <label for="film">Kies een film</label>
-    @Html.DropDownListFor(x => x.Movie.MovieId, movieListSelect, new { @class = "form-control" })
+    @Html.DropDownListFor(x => x.MovieId, movieListSelect, new { @class = "form-control" })
+    <br />
     <label for="zaal">Kies een zaal</label>
     @Html.DropDownListFor(x => x.RoomId, roomListSelect, new { @class = "form-control" })
+    <br />
     <label for="popcorn">Popcornarrangement</label>
     <div class="checkbox-inline">
-    @Html.CheckBoxFor(x => x.PopcornArrangement)
+    @Html.CheckBoxFor(x => x.PopcornArrangement, true)
+    <br />
     </div>
     <label for="VIP">Vip-kaartje</label>
-    @Html.CheckBoxFor(x => x.VIP)
-    <label for="ladiesnight">Ladiesnight</label>
-    <input type="checkbox" id="ladies" name="ladiesnight" value="true"/>
+    @Html.CheckBoxFor(x => x.VIP, true)
+    <br />
+    <label>Start datum</label><input type="date" name="datum" />
+    <label>Starttijd</label><input type="time" name="starttijd" />
+    <br />
+    <label for="holiday">Vakantie</label>
+    @Html.CheckBoxFor(x => x.Holiday, true)
+
+    <input type="submit" value="Voorstelling toevoegen" />
+    }
 </div>
 

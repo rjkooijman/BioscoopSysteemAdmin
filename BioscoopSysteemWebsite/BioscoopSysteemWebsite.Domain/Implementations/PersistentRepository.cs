@@ -155,5 +155,31 @@ namespace BioscoopSysteemWebsite.Domain.Implementations
         public IEnumerable<Room> GetAllRooms() {
             return context.Rooms;
         }
+
+        [ExcludeFromCodeCoverage]
+        public IEnumerable<LadiesNight> GetAllLadiesNights() {
+            return context.LadiesNights;
+        }
+
+        [ExcludeFromCodeCoverage]
+        public void AddShow(Show show) {
+            context.Shows.Add(show);
+            context.SaveChanges();
+        }
+
+        [ExcludeFromCodeCoverage]
+        public Movie GetMovieById(int id) {
+            return context.Movies.Where(m => m.MovieId == id).First();
+        }
+
+        [ExcludeFromCodeCoverage]
+        public Room GetRoomById(int id) {
+            return context.Rooms.Where(r => r.RoomId == id).First();
+        }
+
+        [ExcludeFromCodeCoverage]
+        public LadiesNight GetLadiesNightByDate(DateTime date) {
+            return context.LadiesNights.Where(ln => ln.LadiesNightDay == date).FirstOrDefault();
+        }
     }
 }
