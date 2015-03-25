@@ -1,7 +1,6 @@
 ﻿@model BioscoopSysteemWebsite.Domain.Entities.Show
 @using BioscoopSysteemWebsite.Domain.Entities
 @{
-    List<Show> showList = ViewBag.showList;
     List<SelectListItem> movieListSelect = ViewBag.MovieSelect;
     List<SelectListItem> roomListSelect = ViewBag.RoomSelect;
     List<LadiesNight> ladiesNightList = ViewBag.ladiesNightList;
@@ -40,7 +39,9 @@
     <label for="VIP">Vip-kaartje</label>
     @Html.CheckBoxFor(x => x.VIP, true)
     <br />
+        @ViewBag.DateError
     <label>Start datum</label><input type="date" name="datum" />
+        @ViewBag.TimeError
     <label>Starttijd</label><input type="time" name="starttijd" />
     <br />
     <label for="holiday">Vakantie</label>
