@@ -4,5 +4,5 @@
     ViewBag.Title = "Cashier";
 }
 
-<h2>Cashier</h2>
-
+<h2>@Model.FirstName, je bent nu ingelogd!</h2>
+@Html.ActionLink("Ga verder", "Overview", "Kassa", new { userid = Model.UserId }, null)

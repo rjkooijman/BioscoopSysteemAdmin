@@ -117,7 +117,7 @@
                     <div id="col-md-12">
                         <div class="form-group">
                             @ViewBag.error
-                            @using (Html.BeginForm("NewOrder", "Home", new {secretShow = ViewBag.SecretShow}))
+                            @using (Html.BeginForm("NewOrder", "Home", new {secretShow = ViewBag.SecretShow, userid = ViewBag.Userid}))
                             {
                                 @Html.ValidationSummary()
 

@@ -24,6 +24,8 @@ namespace BioscoopSysteemWebsite.Domain.Entities
         public int ShowID { get; set; }
         public virtual List<Ticket> Tickets { get; set; }
         public bool SecretShowOrder { get; set; }
+        public int UserID { get; set; }
+        public virtual User User { get; set; }
 
         public Order()
         {

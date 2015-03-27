@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using BioscoopSysteemWebsite.Domain.Entities;
 
 namespace BioscoopSysteemAdmin.WebUI.Controllers {
     public class PlannerController : Controller {
@@ -46,13 +45,29 @@ namespace BioscoopSysteemAdmin.WebUI.Controllers {
                 show.LadiesNight = repo.GetLadiesNightByDate(newDate);
                 show.LadiesNightid = show.LadiesNight.LadiesNightid;
             }
-            
+
+            foreach (Room r in roomList) {
+                //Check  of de zaal wel goede type is
+                if (show.Movie.Type == true && r.Type == false && r.RoomId == show.Room.RoomId) {
+                    List<LadiesNight> ladiesNightList = repo.GetAllLadiesNights().Where(l => l.LadiesNightDay.DayOfYear > DateTime.Now.DayOfYear).ToList();
+                    ViewBag.ladiesNightSelect = ladiesNightList;
+                    ViewBag.RoomSelect = RoomSelect();
+                    ViewBag.MovieSelect = MovieSelect();
+                    ViewBag.RoomError = "De zaal ondersteunt geen 3D";
+                    return View();
+                } else {
+                    show.Room = r;
+                }
+            }
+
+            //Check of de film nog beschikbaar is
             if(newDate.Date < show.Movie.EndDate.Date) {
                 foreach (Show x in showList) {
                     Double doubleDuration = Double.Parse(show.Movie.Duration.ToString());
                     TimeSpan span = TimeSpan.FromMinutes(doubleDuration);
-                   
-                    if (newDate.TimeOfDay > x.StartTime.TimeOfDay && newDate < (x.StartTime.AddMinutes(doubleDuration))) {
+
+                    //Check of de voorstelling niet overlapt met andere voorstellingen
+                    if (newDate <= (x.StartTime.AddMinutes(doubleDuration)) && newDate.AddMinutes(doubleDuration) >= x.StartTime) {
                         List<LadiesNight> ladiesNightList = repo.GetAllLadiesNights().Where(l => l.LadiesNightDay.DayOfYear > DateTime.Now.DayOfYear).ToList();
                         ViewBag.ladiesNightSelect = ladiesNightList;
                         ViewBag.RoomSelect = RoomSelect();
@@ -61,6 +76,7 @@ namespace BioscoopSysteemAdmin.WebUI.Controllers {
                         return View();
                     }
                 }
+                show.StartTime = newDate;
             } else {
                 List<LadiesNight> ladiesNightList = repo.GetAllLadiesNights().Where(l => l.LadiesNightDay.DayOfYear > DateTime.Now.DayOfYear).ToList();
                 ViewBag.ladiesNightSelect = ladiesNightList;

@@ -25,27 +25,24 @@
 <h2>VoorstellingToevoegen</h2>
 <div class="container">
     @using (Html.BeginForm("VoorstellingToevoegen", "Planner", FormMethod.Post)) {
-    <label for="film">Kies een film</label>
-    @Html.DropDownListFor(x => x.MovieId, movieListSelect, new { @class = "form-control" })
+    <label for="film">Kies een film</label>@Html.DropDownListFor(x => x.MovieId, movieListSelect, new { @class = "form-control" })
+
     <br />
-    <label for="zaal">Kies een zaal</label>
-    @Html.DropDownListFor(x => x.RoomId, roomListSelect, new { @class = "form-control" })
+        @ViewBag.RoomError
+
+    <label for="zaal">Kies een zaal</label>@Html.DropDownListFor(x => x.RoomId, roomListSelect, new { @class = "form-control" })
     <br />
-    <label for="popcorn">Popcornarrangement</label>
-    <div class="checkbox-inline">
-    @Html.CheckBoxFor(x => x.PopcornArrangement, true)
-    <br />
-    </div>
-    <label for="VIP">Vip-kaartje</label>
-    @Html.CheckBoxFor(x => x.VIP, true)
+    <label for="popcorn">Popcornarrangement</label><div class="checkbox-inline">@Html.CheckBoxFor(x => x.PopcornArrangement, true)</div>
+
+    <label for="VIP">Vip-kaartje</label>@Html.CheckBoxFor(x => x.VIP, true)
     <br />
         @ViewBag.DateError
     <label>Start datum</label><input type="date" name="datum" />
         @ViewBag.TimeError
     <label>Starttijd</label><input type="time" name="starttijd" />
     <br />
-    <label for="holiday">Vakantie</label>
-    @Html.CheckBoxFor(x => x.Holiday, true)
+    <label for="holiday">Vakantie</label><div class="checkbox-inline">@Html.CheckBoxFor(x => x.Holiday, true)</div>
+
 
     <input type="submit" value="Voorstelling toevoegen" />
     }
