@@ -1,8 +1,8 @@
 ﻿@model BioscoopSysteemWebsite.Domain.Entities.User
 
 @{
-    ViewBag.Title = "Admin";
+    ViewBag.Title = "Management";
 }
 
-<h2>Admin</h2>
-
+<h2>@Model.FirstName, je bent nu ingelogd!</h2>
+@Html.ActionLink("Ga verder", "Overview", "Admin", new { userid = Model.UserId }, null)

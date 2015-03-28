@@ -488,6 +488,9 @@ namespace BioscoopSysteemWebsite.WebUI.Controllers
                 {
                     aangebodenTickets.Add(tickets.First(r => r.TicketSoortID == 3));
                 }
+                if (show.VIP) {
+                    aangebodenTickets.Add(tickets.First(r => r.Naam.ToLower() == "vip ticket"));
+                }
             }
             return aangebodenTickets;
         }

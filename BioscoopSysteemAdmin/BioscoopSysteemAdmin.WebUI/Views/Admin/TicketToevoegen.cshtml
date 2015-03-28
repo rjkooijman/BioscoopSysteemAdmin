@@ -1,0 +1,17 @@
+﻿@model BioscoopSysteemWebsite.Domain.Entities.TicketSoort
+@{
+    ViewBag.Title = "Ticket toevoegen";
+}
+
+<h2>TicketToevoegen</h2>
+@ViewBag.TicketError
+<div class="form-group form-inline">
+    @using (Html.BeginForm("TicketToevoegen", "Admin", FormMethod.Post)) { 
+        <label for="Ticketname">Ticket naam</label>@Html.TextBoxFor(x => x.Naam, new { @class = "form-control"}) <br />
+        <label for="Price">Prijs</label>@Html.TextBoxFor(x => x.Price, new { @class = "form-control", @type = "number", @step = "0.01" })<br />
+        <label for="EnTicketname">Engelse ticket naam</label>@Html.TextBoxFor(x => x.EnglishTicketName, new { @class = "form-control" })<br />
+        <input type="hidden" name="userId" value="@ViewBag.Userid" />
+    
+        <input type="submit" value="Ticket toevoegen"  class="controlbtn"/>
+}
+</div>

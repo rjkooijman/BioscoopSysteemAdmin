@@ -1,0 +1,21 @@
+﻿@model List<BioscoopSysteemWebsite.Domain.Entities.Show>
+@using BioscoopSysteemWebsite.Domain.Entities
+@{
+    ViewBag.Title = "Overview";
+}
+
+<h2>Overview</h2>
+<div class="container">
+    <div class="text-center">
+        <table class="table">
+            <thead>
+            <td>Film</td><td>Datum</td><td>Tijd</td><td>Popcornarrangement</td><td>VIP</td><td>Ladiesnight</td><td>Vakantie</td><td>Zaal</td></thead>
+            <tbody class="table-striped">
+            @foreach (Show show in Model) {
+                <tr><td>@show.Movie.Name</td><td>@show.StartTime.Day-@show.StartTime.Month-@show.StartTime.Year</td><td>@show.StartTime.TimeOfDay</td><td>@show.PopcornArrangement</td><td>@show.VIP</td><td>@show.LadiesNightid</td><td>@show.Holiday</td><td>@show.Room.RoomNumber</td></tr>
+            }
+                </tbody>
+        </table>
+    </div>
+    @Html.ActionLink("Voorstelling toevoegen", "VoorstellingToevoegen", "Planner", new { userid = @ViewBag.Userid}, null)
+</div>

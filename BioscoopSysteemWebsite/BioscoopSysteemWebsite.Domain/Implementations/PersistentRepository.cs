@@ -181,5 +181,11 @@ namespace BioscoopSysteemWebsite.Domain.Implementations
         public LadiesNight GetLadiesNightByDate(DateTime date) {
             return context.LadiesNights.Where(ln => ln.LadiesNightDay == date).FirstOrDefault();
         }
+
+        [ExcludeFromCodeCoverage]
+        public void AddTicketSoort(TicketSoort ticket) {
+            context.TicketSoort.Add(ticket);
+            context.SaveChanges();
+        }
     }
 }

@@ -1,0 +1,24 @@
+﻿@model List<BioscoopSysteemWebsite.Domain.Entities.TicketSoort>
+@using BioscoopSysteemWebsite.Domain.Entities
+@{
+    ViewBag.Title = "Overview";
+}
+
+<h2>Overview</h2>
+<div class="container">
+    <div class="text-center">
+        <table class="table">
+            <thead>
+            <td>#</td>
+            <td>Naam</td>
+            <td>Prijs</td>
+            <td>Engelse naam</td>
+            <tbody class="table-striped">
+                @foreach (TicketSoort tickets in Model) {
+                    <tr><td>@tickets.TicketSoortID</td><td>@tickets.Naam</td><td>@tickets.Price</td><td>@tickets.EnglishTicketName</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    @Html.ActionLink("Ticket toevoegen", "TicketToevoegen", "Admin", new { userid = @ViewBag.Userid }, null)
+</div>

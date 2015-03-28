@@ -13,18 +13,18 @@ namespace BioscoopSysteemAdmin.WebUI.Controllers {
 
         public PlannerController(IRepository repo) {
             this.repo = repo;
-            List<Movie> moviesList = repo.GetAllMovies().Where(m => m.StartDate < DateTime.Now && m.EndDate > DateTime.Now).ToList();
-            List<Room> roomList = repo.GetAllRooms().ToList();
-            List<LadiesNight> ladiesNightList = repo.GetAllLadiesNights().Where(l => l.LadiesNightDay.DayOfYear > DateTime.Now.DayOfYear).ToList();
-            List<Show> showList = repo.GetAllShows().Where(s => s.StartTime > DateTime.Now).ToList();
-            List<SelectListItem> roomListSelect = new List<SelectListItem>();
-            List<SelectListItem> movieListSelect = new List<SelectListItem>();
+        }
+
+        public ActionResult Overview(int userid) {
+            List<Show> showList = repo.GetAllShows().OrderBy(s => s.StartTime).ToList();
+            ViewBag.Userid = userid;
+            return View(showList);
         }
 
         [HttpGet]
-        public ActionResult VoorstellingToevoegen() {
+        public ActionResult VoorstellingToevoegen(int userid) {
             List<LadiesNight> ladiesNightList = repo.GetAllLadiesNights().Where(l => l.LadiesNightDay.DayOfYear > DateTime.Now.DayOfYear).ToList();
-
+            ViewBag.Userid = userid;
             ViewBag.ladiesNightSelect = ladiesNightList;
             ViewBag.RoomSelect = RoomSelect();
             ViewBag.MovieSelect = MovieSelect();
@@ -64,10 +64,9 @@ namespace BioscoopSysteemAdmin.WebUI.Controllers {
             if(newDate.Date < show.Movie.EndDate.Date) {
                 foreach (Show x in showList) {
                     Double doubleDuration = Double.Parse(show.Movie.Duration.ToString());
-                    TimeSpan span = TimeSpan.FromMinutes(doubleDuration);
 
                     //Check of de voorstelling niet overlapt met andere voorstellingen
-                    if (newDate <= (x.StartTime.AddMinutes(doubleDuration)) && newDate.AddMinutes(doubleDuration) >= x.StartTime) {
+                    if (newDate <= (x.StartTime.AddMinutes(Double.Parse(x.Movie.Duration.ToString()))) && newDate.AddMinutes(doubleDuration) >= x.StartTime) {
                         List<LadiesNight> ladiesNightList = repo.GetAllLadiesNights().Where(l => l.LadiesNightDay.DayOfYear > DateTime.Now.DayOfYear).ToList();
                         ViewBag.ladiesNightSelect = ladiesNightList;
                         ViewBag.RoomSelect = RoomSelect();

@@ -1,0 +1,8 @@
+﻿@model BioscoopSysteemWebsite.Domain.Entities.User
+
+@{
+    ViewBag.Title = "Back office";
+}
+
+<h2>@Model.FirstName, je bent nu ingelogd!</h2>
+@Html.ActionLink("Ga verder", "Overview", "Planner", new { userid = Model.UserId }, null)

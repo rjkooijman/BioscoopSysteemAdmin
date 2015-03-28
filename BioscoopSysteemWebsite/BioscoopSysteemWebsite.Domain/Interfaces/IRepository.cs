@@ -68,5 +68,7 @@ namespace BioscoopSysteemWebsite.Domain.Interfaces {
         Room GetRoomById(int id);
 
         LadiesNight GetLadiesNightByDate(DateTime date);
+
+        void AddTicketSoort(TicketSoort ticket);
     }
 }
