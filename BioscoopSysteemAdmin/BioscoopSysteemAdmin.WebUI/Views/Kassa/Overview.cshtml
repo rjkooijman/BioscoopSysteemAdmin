@@ -1,103 +1,59 @@
 ﻿@using BioscoopSysteemWebsite.Domain.Entities
 @using System.Collections.Generic
+@using System.Globalization
 
-@model List<Show>
+@model Dictionary<Movie, List<Show>>
 
 @{
-    Show show;
+    CultureInfo ci;
     ViewBag.Title = "Overview";
+        ci = new CultureInfo("nl-NL", false);
+    DateTime vandaag = DateTime.Today.AddDays(ViewBag.SelectId);
 }
+
 <section id="intro">
-    <div class="container">
-        <div class="introtext">
-            <h1><a href="@Url.Action("Index", "Home")" class="backbtn"> </a>Eerst volgende films</h1>
-            <h1 id="txt"></h1>
-        </div>
-    </div>
+    <div class="animated bounceInDown introtext"><h1>Voorstellingen voor:</h1><h3 style="color: white;">@ci.DateTimeFormat.GetDayName(vandaag.DayOfWeek) @vandaag.Day @ci.DateTimeFormat.GetMonthName(vandaag.Month)</h3></div>
 </section>
-<section id="content">
-    <div class="container">
-        <div class="col-md-12">
-            @for (int x = 0; x < Model.Count - 1; x++) {
-                show = Model[x];
-                <div id="filmcontent">
-                    <div class="col-md-2">
-                        @if (@show.Movie.ImageData == null) {
-                            <img width="150" height="150" src="~/resources/geencover.jpg" />
-                            <br />
-                            <br />
-                            <br />
-                        } else {
-                            <img width="130" height="160" src="/resources/@show.Movie.ImageData" />
-                            <br />
-                            <br />
-                            <br />
-                        }
-                    </div>
-                    <div class="col-md-8">
-                        <div class="row">
-                            <h3>@show.Movie.Name | @show.StartTime.TimeOfDay</h3>
-                        </div>
-                        <div class="row">
-                            <p><b>Gesproken taal:</b> @show.Movie.Language</p> <br />
-                            <p><b>Ondertiteld:</b> @show.Movie.Subtitle</p> <br />
-                            <p>
-                                <b>3D:</b>
-                                @if (@show.Movie.Type == true) {
-                                    @:Ja
-                                    } else {
-                                    @:Nee
-                                    }
-                            </p><br />
-                            <p><b>Zaalnummer:</b> @show.Room.RoomNumber</p>
-                            <br />
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        @if (@show.Room.Accessibility == true) {
-                            <img style="height: 50px; width: 50px;" src="~/resources/rolstoel.jpg" />
-                            <br />
-                        } else {
-                            <img style="height: 50px; width: 50px;" src="~/resources/geenrolstoel.jpg" />
-                            <br />
-                        }
-
-                        @Html.ActionLink("Bestel", "Order", "Kassa", new { id = @show.ShowID, secretFilm = false, userid = @ViewBag.Userid }, new { @class = "bbbutton" })
-                        <br /><br />
-                    </div>
-                </div>
-                <br />
-            }
-
-            @{show = Model[Model.Count - 1];}
-            <!--Geheime show-->
-            <div id="filmcontent">
-                <div class="col-md-2">
-                    <img width="150" height="150" src="~/resources/geheim.png" />
-                    <br />
-                    <br />
-                    <br />
-                </div>
-                <div class="col-md-8">
-                    <div class="row">
-                        <h3>Verrassings film | @show.StartTime.TimeOfDay</h3>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    @if (@show.Room.Accessibility == true) {
-                        <img style="height: 50px; width: 50px;" src="~/resources/rolstoel.jpg" />
-                        <br />
-                    } else {
-                        <img style="height: 50px; width: 50px;" src="~/resources/geenrolstoel.jpg" />
-                        <br />
-                    }
-
-                    @Html.ActionLink("Bestel", "Order", "Kassa", new { id = @show.ShowID, secretFilm = true, userid = @ViewBag.Userid }, new { @class = "bbbutton" }) 
-                    <br />
-                    <br />
-                </div>
+<section id="content" style="padding-top: 50px">
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        @Html.Partial("_KassaMenu")
+                    </li>
+                </ul>
             </div>
-            <br />
+            </div>
+            </nav>
+            @{
+                for (int x = 0; x < 7; x++) {
+                    DateTime date = DateTime.Today.AddDays(x);
+                    string dag;
+                    bool selected = (x == ViewBag.SelectId) ? true : false;
+                    switch (x) {
+                        case 0:
+                            dag = "Vandaag";
+                            break;
+                        case 1:
+                            dag = "Morgen";
+                            break;
+                        default:
+                            dag = ci.DateTimeFormat.GetDayName(date.DayOfWeek);
+                            break;
+                    }
+                    <div id="@((int)date.DayOfWeek)" class="submitbtn timeButton dayButton @(selected ? "selected" : "")" onclick="location.href='@Url.Action("Overview", "Home", new { id = x }, null)'">
+                        @dag
+                    </div>
+                }
+            }
         </div>
-    </div>
+        <br />
+        <div class="container">
+            @if (Model != null && Model.Count > 0) {
+                @Html.Partial("_PartialOverview");
+            } else {
+                @Html.Partial("_Empty");
+            }
+        </div>
 </section>

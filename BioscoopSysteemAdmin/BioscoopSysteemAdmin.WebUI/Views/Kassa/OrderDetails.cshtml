@@ -1,0 +1,25 @@
+﻿@model BioscoopSysteemWebsite.Domain.Entities.Order
+
+@{
+    ViewBag.Title = "OrderDetails";
+}
+<section id="content">
+    <div class="container">
+        <div class="text-center">
+            <table class="table">
+                <thead>
+                <td>#</td>
+                <td>Betaald</td>
+                <td>Opgehaald</td>
+                <td>Email</td>
+                <td>Film</td>
+                <td>Starttijd</td>
+                <td>Aantal tickets</td>
+                <td>Wijzigen</td>
+                <tbody class="table-striped">
+                        <tr><td>@Model.OrderId</td><td>@Model.Paid</td><td>@Model.PickedUp</td><td>@Model.Email</td><td>@Model.Show.Movie.Name</td><td>@Model.Show.StartTime.TimeOfDay</td><td>@Model.Tickets.Count()</td><td>@Html.ActionLink("Wijzig", "ChangeOrder", "Kassa", new { id = @Model.OrderId, userid = @ViewBag.Userid }, null) </td>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>

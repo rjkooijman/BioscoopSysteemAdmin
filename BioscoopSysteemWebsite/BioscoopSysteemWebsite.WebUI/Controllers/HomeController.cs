@@ -211,6 +211,7 @@ namespace BioscoopSysteemWebsite.WebUI.Controllers
                         return View("Order", order.ShowID);
                     }
                 }
+                order.UserID = 4;
                 repo.AddOrder(order);
                 Session["OrderID"] = order.OrderId;
                 return View("ManualSeat", order);

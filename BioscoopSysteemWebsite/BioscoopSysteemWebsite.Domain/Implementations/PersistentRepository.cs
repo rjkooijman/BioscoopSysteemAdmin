@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics.CodeAnalysis;
+using System.Data.Entity;
 
 namespace BioscoopSysteemWebsite.Domain.Implementations
 {
@@ -21,7 +22,29 @@ namespace BioscoopSysteemWebsite.Domain.Implementations
         {
             return context.Shows;
         }
+        public void ChangeSeats(int seatNumber, int rowNumber) {
+            foreach (Seat seat in context.Seats) {
+                if (seat.Number == seatNumber && seat.Row == rowNumber) {
+                    context.Seats.Remove(seat);
+                }
+            }
+            context.SaveChanges();
+        }
 
+        public void ChangeTicket(int? ticketid, int? seatid) {
+            foreach (Seat seat in context.Seats) {
+                if (seat.SeatId == seatid) {
+                    context.Seats.Remove(seat);
+                }
+            }
+            foreach (Ticket ticket in context.Tickets) {
+                if (ticket.TicketId == ticketid) {
+                    context.Tickets.Remove(ticket);
+                }
+            }
+            
+            context.SaveChanges();
+        }
 
         public Movie GetByID(int id)
         {

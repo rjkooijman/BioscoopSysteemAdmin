@@ -4,20 +4,27 @@
 }
 
 <h2>Index</h2>
+<section id="content">
+    <div class="container">
+        <div class="col-md-2">
+            <div class="form-group">
 
-@using (Html.BeginForm( "Index", "Home", FormMethod.Post)) {
-    @Html.ValidationSummary()
-    <div class="validation-summary-errors">
-        @ViewBag.IncorrectUser
-        @ViewBag.IncorrectPassword
-    </div>
-    <div>
-        <label>Logincode</label> @Html.TextBoxFor(x => x.UserId, new { @class = "form-control" })
-    </div>
-    <div>
-        <label>Wachtwoord</label> @Html.PasswordFor(x => x.Password, new { @class = "form-control" })
-    </div>
-    <div class="text-center">
-        <input class="btn btn-success" type="submit" value="Login" />
-    </div>
-}
+                @using (Html.BeginForm("Index", "Home", FormMethod.Post)) {
+                    @Html.ValidationSummary()
+                    <div class="validation-summary-errors">
+                        @ViewBag.IncorrectUser
+                        @ViewBag.IncorrectPassword
+                    </div>
+                    <div>
+                        <label>Logincode</label> @Html.TextBoxFor(x => x.UserId, new { @class = "search" })
+                    </div>
+                    <div>
+                        <label>Wachtwoord</label> @Html.PasswordFor(x => x.Password, new { @class = "search" })
+                    </div>
+                    <br />
+                        <input class="submitbtn" type="submit" value="Login" />
+                }
+                </div>
+            </div>
+        </div>
+    </section>

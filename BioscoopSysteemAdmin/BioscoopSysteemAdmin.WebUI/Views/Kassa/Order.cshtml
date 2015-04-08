@@ -1,127 +1,136 @@
 ﻿@using BioscoopSysteemWebsite.Domain.Entities
 @model Show
 @{
-    ViewBag.Title = "Order";
     List<TicketSoort> tickets = ViewBag.Tickets;
+    ViewBag.Title = "Order";
 }
 <script type="text/javascript" src="~/Scripts/jquery-1.10.2.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script type="text/javascript" src="~/Scripts/form.js"></script>
-<section id="intro">
+
+<section id="filmbanner">
     <div class="container">
-        <div class="introtext">
-            <h1><a href="@Url.Action("Index", "Home")" class="backbtn"> </a>Order voor @Model.Movie.Name</h1>
-            <h1 id="txt"></h1>
-        </div>
     </div>
 </section>
 <section id="content">
     <div class="container">
-        <br />
-        <div class="col-md-12">
-            <div class="filmorder">
-                <div class="col-md-2">
-                    @if (@Model.Movie.ImageData == null) {
-                        <img width="150" height="150" src="/resources/geencover.jpg" />
-                        <br />
-                        <br />
-                        <br />
-                    } else {
-                        <img width="130" height="160" src="/resources/@Model.Movie.ImageData" />
-                        <br />
-                        <br />
-                        <br />
-                    }
-                </div>
-                <div class="col-md-8">
-                    <div class="row">
-                        <p>@Model.Movie.Description</p>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div id="row">
-                        @if (@Model.Movie.Pegi.All == true) {
-                            <img src="/resources/kijkwijzer_AL.png" style="height: 37px; width: 37px;" />
-                        }
-                        @if (@Model.Movie.Pegi.SixPlus == true) {
-                            <img src="/resources/kijkwijzer_6.png" style="height: 37px; width: 37px;" />
-                        }
-                        @if (@Model.Movie.Pegi.TwelvePlus == true) {
-                            <img src="/resources/kijkwijzer_12.png" style="height: 37px; width: 37px;" />
-                        }
-                        @if (@Model.Movie.Pegi.SixteenPlus == true) {
-                            <img src="/resources/kijkwijzer_16.png" style="height: 37px; width: 37px;" />
-                        }
-                        @if (@Model.Movie.Pegi.Violence == true) {
-                            <img src="/resources/kijkwijzer_violence.png" style="height: 37px; width: 37px;" />
-                        }
-                        @if (@Model.Movie.Pegi.Horror == true) {
-                            <img src="/resources/kijkwijzer_horror.png" style="height: 37px; width: 37px;" />
-                        }
-                        @if (@Model.Movie.Pegi.Sex == true) {
-                            <img src="/resources/kijkwijzer_sex.png" style="height: 37px; width: 37px;" />
-                        }
-                        @if (@Model.Movie.Pegi.Language == true) {
-                            <img src="/resources/kijkwijzer_language.png" style="height: 37px; width: 37px;" />
-                        }
-                        @if (@Model.Movie.Pegi.Drugs == true) {
-                            <img src="/resources/kijkwijzer_drugs.png" style="height: 37px; width: 37px;" />
-                        }
-                        @if (@Model.Movie.Pegi.Racism == true) {
-                            <img src="/resources/kijkwijzer_discrimination.png" style="height: 37px; width: 37px;" />
-                        }
-                    </div>
-                    <div class="row">
-                        <p><b>Duur:</b><br /> @Model.Movie.Duration minuten</p><br />
-                        <p><b>Gesproken taal:</b><br /> @Model.Movie.Language</p> <br />
-                        <p><b>Ondertiteld:</b><br /> @Model.Movie.Subtitle</p> <br />
-                        <p>
-                            <b>Te zien in:</b><br />
-                            @if (@Model.Movie.Type == true) {
-                                @:3D
-                        } else {
-                                @:2D
-                        }
-                        </p>
-                        <br />
-                        <br />
-                        <p>
-                            <b>Popcorn arrangement:</b><br />
-                            @if (@Model.PopcornArrangement) {
-                                <img src="http://upload.wikimedia.org/wikipedia/commons/6/6c/Popcorn_Time_logo.png" style="height:37px; width:37px;" />
-                            } else {
-                                <img src="~/Resources/Popcorn_Time_logo_false.png" style="height:37px; width:37px;" />
-                            }
-                        </p>
-                        <br />
-                    </div>
-                </div>
-                <div id="col-md-12">
-                    <div class="form-group">
-                        @ViewBag.error
-                        @using (Html.BeginForm("Order", "Kassa", new { secretFilm = ViewBag.SecretFilm, userid = ViewBag.Userid }, FormMethod.Post)) {
-                            @Html.ValidationSummary()
-
-                            for (int i = 0; i < tickets.Count(); i++) {
-                                <label for="soortkaart">@tickets[i].Naam</label>
-                                @Html.Hidden("Type", @tickets[i].TicketSoortID)
-                                @Html.TextBox("Amount", "0")
-                                <br />
-                            }
-                            <br />
-                            <label>Handmatig stoelen selecteren </label>
-                            <br />
-                            <input type="checkbox" name="autoAssign"><br />
-                            <input type="hidden" name="showId" value="@Model.ShowID" />
-                            <br />
-                            <br />
-                            <input type="submit" class="controlbtn" value="Bestellen" />
-                        }
-                    </div>
-                    <br /><br /><br />
-                </div>
+        <div class="col-md-2">
+            @if (@Model.Movie.ImageData == null) {
+                <img width="150" height="150" src="/resources/geencover.jpg" />
+                <br />
+                <br />
+                <br />
+            } else {
+                <img width="130" height="160" src="/resources/@Model.Movie.ImageData" />
+                <br />
+                <br />
+                <br />
+            }
+        </div>
+        <div class="col-md-8">
+            <div class="row">
+                <h1>@Model.Movie.Name</h1>
+                    <p>@Model.Movie.Description</p>
+                <iframe width="90%" height="315" src="@Model.Movie.TrailerUrl" frameborder="0" allowfullscreen></iframe>
             </div>
+        </div>
+        <div class="col-md-2">
+            <div id="row">
+                @if (@Model.Movie.Pegi.All == true) {
+                    <img src="/resources/kijkwijzer_AL.png" style="height: 37px; width: 37px;" />
+                }
+                @if (@Model.Movie.Pegi.SixPlus == true) {
+                    <img src="/resources/kijkwijzer_6.png" style="height: 37px; width: 37px;" />
+                }
+                @if (@Model.Movie.Pegi.TwelvePlus == true) {
+                    <img src="/resources/kijkwijzer_12.png" style="height: 37px; width: 37px;" />
+                }
+                @if (@Model.Movie.Pegi.SixteenPlus == true) {
+                    <img src="/resources/kijkwijzer_16.png" style="height: 37px; width: 37px;" />
+                }
+                @if (@Model.Movie.Pegi.Violence == true) {
+                    <img src="/resources/kijkwijzer_violence.png" style="height: 37px; width: 37px;" />
+                }
+                @if (@Model.Movie.Pegi.Horror == true) {
+                    <img src="/resources/kijkwijzer_horror.png" style="height: 37px; width: 37px;" />
+                }
+                @if (@Model.Movie.Pegi.Sex == true) {
+                    <img src="/resources/kijkwijzer_sex.png" style="height: 37px; width: 37px;" />
+                }
+                @if (@Model.Movie.Pegi.Language == true) {
+                    <img src="/resources/kijkwijzer_language.png" style="height: 37px; width: 37px;" />
+                }
+                @if (@Model.Movie.Pegi.Drugs == true) {
+                    <img src="/resources/kijkwijzer_drugs.png" style="height: 37px; width: 37px;" />
+                }
+                @if (@Model.Movie.Pegi.Racism == true) {
+                    <img src="/resources/kijkwijzer_discrimination.png" style="height: 37px; width: 37px;" />
+                }
+            </div>
+                <div class="row">
+                    <p><b>Duur: </b>@Model.Movie.Duration minuten</p><br />
+                    <p><b>Zaal: </b>@Model.RoomId </p><br />
+                    <p><b>Gesproken taal: </b>@Model.Movie.Language</p> <br />
+                    <p><b>Ondertiteld: </b>@Model.Movie.Subtitle</p> <br />
+                    <p><b>Regisseur: </b>@Model.Movie.Director.Name</p> <br />
+                    <p>
+                        <b>Cast: </b>
+                        @Html.Raw(ViewBag.Actors)
+                    </p> <br />
+                    <p><b>Verwachte looptijd: </b><br />@Model.Movie.StartDate.ToShortDateString()<br /> t/m<br /> @Model.Movie.EndDate.ToShortDateString()</p><br />
+                    <p><b>IMDb: </b><a href="@Model.Movie.IMDBUrl">@Model.Movie.Name</a></p>
+                    <p><b>Website: </b><a href="@Model.Movie.FilmWebsite">@Model.Movie.Name</a></p>
+                    <p>
+                        <b>Te zien in: </b>
+                        @if (@Model.Movie.Type == true) {
+                            @:3D
+                        } else {
+                            @:2D
+                        }
+                    </p>
+                    <p>
+                        <b>Popcornkaart: </b><br />
+                        @if (Model.PopcornArrangement) {
+                            <img src="~/Resources/Popcorn_Time_logo_true.png" style="height:75px; width:75px;" />
+                        } else {
+                            <img src="~/Resources/Popcorn_Time_logo_false.png" style="height:75px; width:75px;" />
+                        }
+                    </p>
+
+                    <p>
+                        <b>Toegankelijkheid: </b><br />
+                        @if (Model.Room.Accessibility == true) {
+                            <img style="height: 50px; width: 50px;" src="~/resources/rolstoel.jpg" />
+                            <br />
+                        } else {
+                            <img style="height: 50px; width: 50px;" src="~/resources/geenrolstoel.jpg" />
+                            <br />
+                        }
+                    </p>
+                </div>
+        </div>
+    </div>
+    <div id="col-md-12">
+            <h1>Bestel nu uw kaarten!</h1>
+        <p>@ViewBag.order</p>
+        <div class="form-group">
+            @ViewBag.error
+            @using (Html.BeginForm("NewOrder", "Kassa")) {
+                @Html.ValidationSummary()
+
+                for (int i = 0; i < tickets.Count(); i++) {
+                    @Html.Hidden("Type", @tickets[i].TicketSoortID)
+                    <label for="soortkaart">@tickets[i].Naam</label>
+                    @Html.TextBox("Amount", "0")
+                    <br />
+                }
+
+                <br />
+                <label for="email">E-mail:</label><input type="text" name="email" />
+                <input type="hidden" name="showId" value="@Model.ShowID" />
+                <br /><br />
+                    <input class="submitbtn" type="submit" value="Bestellen" />
+            }
         </div>
     </div>
 </section>
-

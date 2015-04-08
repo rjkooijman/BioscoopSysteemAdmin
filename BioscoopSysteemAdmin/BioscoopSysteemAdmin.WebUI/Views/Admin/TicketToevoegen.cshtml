@@ -8,7 +8,7 @@
 <div class="form-group form-inline">
     @using (Html.BeginForm("TicketToevoegen", "Admin", FormMethod.Post)) { 
         <label for="Ticketname">Ticket naam</label>@Html.TextBoxFor(x => x.Naam, new { @class = "form-control"}) <br />
-        <label for="Price">Prijs</label>@Html.TextBoxFor(x => x.Price, new { @class = "form-control", @type = "number", @step = "0.01" })<br />
+        <label for="Price">Prijs</label>@Html.TextBox("prijs") @Html.TextBox("prijsDecimal", "00")
         <label for="EnTicketname">Engelse ticket naam</label>@Html.TextBoxFor(x => x.EnglishTicketName, new { @class = "form-control" })<br />
         <input type="hidden" name="userId" value="@ViewBag.Userid" />
     

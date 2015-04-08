@@ -41,6 +41,9 @@
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework.Extended">
+      <HintPath>..\packages\EntityFramework.Extended.6.1.0.133\lib\net45\EntityFramework.Extended.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
@@ -147,6 +150,7 @@
     <Content Include="Resources\Thumbs.db" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <None Include="Scripts\jquery-2.1.3-vsdoc.js" />
+    <Content Include="Scripts\main.js" />
     <Content Include="Scripts\jquery-2.1.3.js" />
     <Content Include="Scripts\jquery-2.1.3.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
@@ -181,8 +185,6 @@
     <Content Include="Views\Home\Unauthorized.cshtml" />
     <Content Include="Views\Planner\VoorstellingToevoegen.cshtml" />
     <Content Include="Scripts\jquery-2.1.3.min.map" />
-    <Content Include="Views\Kassa\Overview.cshtml" />
-    <Content Include="Views\Shared\_PartialOverview.cshtml" />
     <Content Include="Views\Kassa\Order.cshtml" />
     <Content Include="Views\Kassa\ManualSeatSelection.cshtml" />
     <Content Include="Views\Kassa\Payment.cshtml" />
@@ -191,6 +193,12 @@
     <Content Include="Views\Admin\Overview.cshtml" />
     <Content Include="Views\Admin\TicketToevoegen.cshtml" />
     <Content Include="Views\Admin\TicketSucces.cshtml" />
+    <Content Include="Views\Kassa\Reservation.cshtml" />
+    <Content Include="Views\Kassa\OrderDetails.cshtml" />
+    <Content Include="Views\Shared\_PartialOverview.cshtml" />
+    <Content Include="Views\Kassa\Overview.cshtml" />
+    <Content Include="Views\Shared\_Empty.cshtml" />
+    <Content Include="Views\Shared\_KassaMenu.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

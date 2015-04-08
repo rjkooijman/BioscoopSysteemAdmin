@@ -3,6 +3,9 @@
 @{
     ViewBag.Title = "Management";
 }
-
-<h2>@Model.FirstName, je bent nu ingelogd!</h2>
-@Html.ActionLink("Ga verder", "Overview", "Admin", new { userid = Model.UserId }, null)
+<section id="content">
+    <div class="container">
+        <h2>@Model.FirstName, je bent nu ingelogd!</h2>
+        @Html.ActionLink("Ga verder", "Overview", "Admin", new { userid = Model.UserId }, null)
+    </div>
+</section>

@@ -1,0 +1,11 @@
+﻿@model BioscoopSysteemWebsite.Domain.Entities.Order
+@{
+    ViewBag.Title = "View";
+}
+<section id="content">
+    <div class="container">
+        @using (Html.BeginForm("Reservation", "Kassa", FormMethod.Post)) {
+            <label for="orderId">Reserveringscode</label> @Html.TextBoxFor(x => x.OrderId, new { @class = "search" })
+        }
+    </div>
+</section>

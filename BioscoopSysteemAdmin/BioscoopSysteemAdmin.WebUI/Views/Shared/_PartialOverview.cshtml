@@ -18,49 +18,32 @@
                     <h3>@movieShows.Key.Name</h3>
                 </div>
                 @foreach (Show show in movieShows.Value.OrderBy(r => r.StartTime)) {
-                    <div class="submitbtn timeButton" onclick="location.href='@Url.Action("Order", "Home", new { id = show.ShowID }, null)'">@show.StartTime.ToShortTimeString()</div>
+                    <div class="submitbtn timeButton" onclick="location.href='@Url.Action("Order", "Kassa", new { id = show.ShowID, userid = ViewBag.Userid }, null)'">@show.StartTime.ToShortTimeString()</div>
                 }
             </div>
             <div class="col-md-2">
                 <div class="row">
                     <p>
-                        @if (Session["Language"].Equals(false)) {
                             <b>Gesproken taal:</b>
-                        } else {
-                            <b>Language:</b>
-                        }
                         <br /> @movieShows.Key.Language
                     </p>
                     <p>
-                        @if (Session["Language"].Equals(false)) {
                             <b>Ondertiteld:</b>
-                        } else {
-                            <b>Subtitles:</b>
-                        }
                         <br /> @movieShows.Key.Subtitle
                     </p>
                     <p>
                         <b>3D:</b>
                         @if (@movieShows.Key.Type == true) {
-                            if (Session["Language"].Equals(false)) {
                                 @:Ja
-                            } else {
-                                @:Yes
-                            }
 
                         } else {
-                            if (Session["Language"].Equals(false)) {
                                 @:Nee
-                            } else {
-                                @:No
-                            }
                         }
                         <br />
-                        @if (Session["Language"].Equals(false)) {
                             <b>Kijkwijzer:</b>
-                        } else {
-                            <b>PEGI:</b>
-                        }<br /> @if (@movieShows.Key.Pegi.All == true) {
+                        <br /> 
+                        
+                        @if (@movieShows.Key.Pegi.All == true) {
                             <img src="/resources/kijkwijzer_AL.png" style="height: 37px; width: 37px;" />
                         }
                         @if (@movieShows.Key.Pegi.SixPlus == true) {
@@ -100,3 +83,4 @@
         &nbsp;
     </p>
 }
+

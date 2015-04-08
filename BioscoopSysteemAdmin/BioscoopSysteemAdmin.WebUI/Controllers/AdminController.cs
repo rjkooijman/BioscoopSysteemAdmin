@@ -38,13 +38,25 @@ namespace BioscoopSysteemAdmin.WebUI.Controllers
 
         [HttpPost]
         public ActionResult TicketToevoegen(TicketSoort ticket) {
+            char[] splitChar = new char[] { ',' };
+            string price = Request["prijs"];
+            string priceDecimal = Request["prijsDecimal"];
+
+            if (price == "") {
+                price = "00";
+            } else if (priceDecimal == "") {
+                priceDecimal = "00";
+            }
+
+            string realPrice = price + "," + priceDecimal;
             int userid = int.Parse(Request["userId"]);
             if (repo.GetUserById(userid).Role.Role == "Admin") {
                 foreach (TicketSoort t in repo.GetTicketSoorten()) {
                     if (ticket.Naam != t.Naam) {
                         ViewBag.Userid = userid;
-                        ticket.Price = Decimal.Parse(ticket.Price.ToString());
-                    } else {
+                        ticket.Price = decimal.Parse(realPrice);
+                        }
+                    else {
                         ViewBag.TicketError = "Een ticket met deze naam bestaat al";
                         return View();
                     }

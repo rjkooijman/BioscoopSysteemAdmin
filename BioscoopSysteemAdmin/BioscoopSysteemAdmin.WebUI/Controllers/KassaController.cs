@@ -19,110 +19,93 @@ namespace BioscoopSysteemAdmin.WebUI.Controllers
             print = new PrintController(repo);
         }
 
-        public ActionResult Overview(int userid) {
-            if (repo.GetUserById(userid).Role.Role == "Kassa") {
-                Dictionary<int, List<Show>> showsAtRooms = new Dictionary<int, List<Show>>();
-                List<Show> toekomstigeShows = repo.GetAllShows().ToList().Where(r => r.StartTime > DateTime.Now && r.StartTime < DateTime.Now.AddDays(1)).ToList();
-                List<Show> showOverview = new List<Show>();
-                ViewBag.Userid = userid;
-
-                if (toekomstigeShows != null && toekomstigeShows.Count > 0) {
-                    foreach (Room room in repo.GetRooms().ToList()) {
-
-                        Show show = toekomstigeShows.Where(r => r.Room.RoomId == room.RoomId).OrderBy(r => r.Movie.StartDate).ToList().FirstOrDefault();
-                        if (show != null) {
-                            showOverview.Add(show);
-                        }
-                    }
-                    showOverview = showOverview.OrderBy(r => r.Movie.Name).ToList();
-
-                    Show geheimeShow = showOverview.OrderByDescending(r => (r.Room.GetCapacity() - r.AssignedSeats.Count)).First();
-                    showOverview.Add(geheimeShow);
-
-                    return View("Overview", showOverview);
+        public ActionResult Overview(int id, int userid)
+            //Gemaakt door: Frank Molengraaf
+         {
+             if (repo.GetUserById(userid).Role.Role == "Kassa") {
+                int dayOffset = id;
+                dayOffset = dayOffset > 6 ? 6 : dayOffset;
+                DateTime date;
+                if (dayOffset == 0) {
+                    date = DateTime.Now;
                 } else {
-                    return View("Empty");
+                    date = DateTime.Now.AddDays(dayOffset);
                 }
-            } else {
-                return View("~/Views/Home/Unauthorized.cshtml");
-            }
+                Dictionary<Movie, List<Show>> listsOfMovies = repo.GetAllShows()
+                    .Where(r => r.StartTime > date && r.StartTime < date.AddDays(1))
+                    .GroupBy(r => r.Movie)
+                    .ToDictionary(group => group.Key, group => group.ToList());
+
+                ViewBag.Userid = userid;
+                ViewBag.SelectId = id;
+                return View("Overview", listsOfMovies);
+             } else {
+                 return View("~/Views/Home/Unautorized.cshtml");
+             }
         }
 
         [HttpGet]
-        public ActionResult Order(int id, bool secretFilm, int userid) {
+        public ViewResult Order(int id, int userid) {
             if (repo.GetUserById(userid).Role.Role == "Kassa") {
                 Show show = repo.GetShowByID(id);
-                ViewBag.Userid = userid;
+                //Get actor
 
-                if (secretFilm) {
-                    show.Movie.Name = "Geheime film";
-                    show.Movie.ImageData = "geencover.jpg";
-                    show.Movie.Description = "";
-                    ViewBag.secretFilm = true;
-                } else {
-                    ViewBag.secretFilm = false;
+                string[] actorspermovie = new string[show.Movie.Actor.Count];
+                int x = 0;
+                foreach (Actor actor in show.Movie.Actor) {
+                    actorspermovie[x] = actor.ActorName;
+                    x++;
                 }
-
+                string allActors = string.Join(", <br />", actorspermovie);
+                ViewBag.Actors = allActors;
                 ViewBag.Tickets = getAvailableTickets(show);
+
+                Session["Userid"] = userid;
+                //Get shows and other information
                 return View(show);
             } else {
                 return View("~/Views/Home/Unautorized.cshtml");
             }
         }
 
+        [ExcludeFromCodeCoverage]
         [HttpPost]
-        public ActionResult Order(bool secretFilm, int userid) {
+        public ViewResult NewOrder() {
+            int userid = (int)Session["Userid"];
             if (repo.GetUserById(userid).Role.Role == "Kassa") {
-                Order order;
-                
-                char[] splitChar = new Char[] { ',' };
-                string[] types = Request["Type"].Split(splitChar);
-                string[] totals = Request["Amount"].Split(splitChar);
-                int[] intTotals = new int[totals.Count()];
                 int id = int.Parse(Request["showId"]);
-                string autoAssign = Request["autoAssign"];
-
-                bool geenKaartBesteld = true;
-
-                int z = 0;
-                foreach (string totalRow in totals) {
-                    int parsedInt;
-                    if (int.TryParse(totalRow, out parsedInt) && parsedInt > 0) {
-                        intTotals[z] = parsedInt;
-                        geenKaartBesteld = false;
+                if (Request["email"] != "") {
+                    char[] splitChar = new Char[] { ',' };
+                    string[] types = Request["Type"].Split(splitChar);
+                    string[] totals = Request["Amount"].Split(splitChar);
+                    string email = Request["email"];
+                    for (int i = 0; i < types.Count(); i++) {
+                        if (types[i] == "") {
+                            types = types.Where(w => w != types[i]).ToArray();
+                        }
                     }
-                    z++;
-                }
-                if (geenKaartBesteld == true) {
-                    return View("Order", repo.GetShowByID(id));
-                }
 
-                for (int i = 0; i < types.Count(); i++) {
-                    if (types[i] == "") {
-                        types = types.Where(t => t != types[i]).ToArray();
+                    Show show = repo.GetShowByID(id);
+                    ViewBag.error = null;
+                    Order order = new Order(show, false);
+
+                    for (int x = 0; x < types.Count(); x++) {
+
+                        TicketSoort t = repo.GetTicketSoort(int.Parse(types[x]));
+                        order.AddTicket(t, int.Parse(totals[x]));
+                        if (email != null) {
+                            order.Email = email;
+                        } else {
+                            return View("Order", order.ShowID);
+                        }
                     }
-                }
-
-                Show show = repo.GetShowByID(id);
-                order = new Order(show, secretFilm);
-                order.Email = "ticketmachine@avanscinema.nl";
-                order.User = repo.GetUserById(userid);
-
-
-                for (int i = 0; i < types.Count(); i++) {
-                    TicketSoort t = repo.GetTicketSoort(int.Parse(types[i]));
-                    order.AddTicket(t, int.Parse(totals[i]));
-                }
-
-                if (autoAssign == null) {
-                    order.AssignAutoSeats();
-                    repo.AddOrder(order);
-                    return View("Payment", order);
-                } else {
+                    order.UserID = 4;
                     repo.AddOrder(order);
                     Session["OrderID"] = order.OrderId;
-                    Session["UserID"] = userid;
                     return View("ManualSeatSelection", order);
+                } else {
+                        @ViewBag.order = "Vul alle velden in.";
+                    return View("Order", new List<Show> { repo.GetShowByID(id) });
                 }
             } else {
                 return View("~/Views/Home/Unauthorized.cshtml");
@@ -133,7 +116,6 @@ namespace BioscoopSysteemAdmin.WebUI.Controllers
         public ViewResult ManualSeatSelection() {
             char[] splitChar = new char[] { ',' };
             int orderId = (int)Session["OrderID"];
-            int userid = (int)Session["UserID"];
             Order order = repo.GetOrderByID(orderId);
 
             string[] seatData = Request["seat"].Split(splitChar);
@@ -153,7 +135,6 @@ namespace BioscoopSysteemAdmin.WebUI.Controllers
 
             order.AssignManualSeats(rowNumbers, seatNumbers);
             repo.UpdateOrder(order);
-            ViewBag.Userid = userid;
 
             return View("Payment", order);
         }
@@ -174,6 +155,95 @@ namespace BioscoopSysteemAdmin.WebUI.Controllers
 
         }
 
+        [HttpGet]
+        public ViewResult Reservation(int userid) {
+            if (repo.GetUserById(userid).Role.Role == "Kassa") {
+                Session["userid"] = userid;
+                return View();
+            } else {
+                return View("~/Views/Home/Unauthorized.cshtml");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Reservation(Order order) {
+            int userid = (int)Session["userid"];
+            if (repo.GetUserById(userid).Role.Role == "Kassa") {
+                Order realOrder = repo.GetOrderByID(order.OrderId);
+                if (realOrder == null) {
+                    ViewBag.Error = "Controleer de reserveringscode, de opgegeven code is niet gevonden";
+                    return View();
+                } else {
+                    ViewBag.Userid = userid;
+                    return View("OrderDetails", realOrder);
+                }
+            } else {
+                return View("~/Views/Home/Unauthorized.cshtml");
+            }
+        }
+
+        public ActionResult ChangeOrder(int id, int userid) {
+            ViewBag.SeatError = "Deze stoelen zijn nog vrij";
+            Order order = repo.GetOrderByID(id);
+            Order orderx = new Order(order.Show, false);
+            List<Seat> seatList = order.Show.AssignedSeats;
+            List<Ticket> ticketList = order.Tickets;
+            List<TicketSoort> ticketSoortList = new List<TicketSoort>();
+            List<int> ticketIdList = new List<int>();
+            List<int?> seatIdList = new List<int?>();
+            int aantal = 0;
+            if (ticketList.Count() > 0) {
+                foreach (Ticket tick in ticketList) {
+                    ticketSoortList.Add(tick.TicketSoort);
+                }
+                for (int i = 0; i < ticketList.Count(); i++) {
+                    for (int x = 0; x < ticketSoortList.Count(); i++) {
+                        aantal = ticketSoortList.Where(ts => ts.TicketSoortID == ticketSoortList[x].TicketSoortID).Count();
+                    }
+                        orderx.AddTicket(ticketList[i].TicketSoort, aantal);
+                }
+                for (int x = 0; x < ticketList.Count(); x++) {
+                        ticketIdList.Add(ticketList[x].TicketId);
+                        seatIdList.Add(ticketList[x].SeatId);
+                }
+                    
+                if (ticketList.Count() > 0) {
+                    for (int i = 0; i < ticketList.Count(); i++) {
+                        repo.ChangeTicket(ticketIdList[i], seatIdList[i]);
+                    }
+                }
+                
+                    
+            }
+            
+            order.Tickets = orderx.Tickets;
+            Session["OrderID"] = order.OrderId;
+            Session["UserID"] = userid;
+            return View("ManualSeatSelection", order);
+            //foreach (Show show in showList) {
+            //    foreach (Seat seat in show.AssignedSeats) {
+            //        foreach (Seat seatx in order.Show.AssignedSeats) {
+            //            if (seat.Row == seatx.Row) {
+            //                if (seat.Number == seatx.Number) {
+            //                    foreach (Ticket ticket in order.Tickets) {
+            //                        order.AddTicket(ticket.TicketSoort, order.Tickets.Where(t => t.TicketSoort == ticket.TicketSoort).Count());
+            //                        order.Tickets.Remove(ticket);
+            //                    }
+            //                    Session["OrderID"] = order.OrderId;
+            //                    Session["UserID"] = userid;
+            //                    return View("ManualSeatSelection", order);
+            //                } else {
+            //                    return View("Reservation");
+            //                }
+            //            } else {
+            //                return View("Reservation");
+            //            }
+            //        }
+            //    }
+            //} return View("Reservation");
+        }
+
+        [ExcludeFromCodeCoverage]
         private List<TicketSoort> getAvailableTickets(Show show) {
             List<TicketSoort> tickets = repo.GetTicketSoorten().ToList();
             List<TicketSoort> aangebodenTickets = new List<TicketSoort>();
