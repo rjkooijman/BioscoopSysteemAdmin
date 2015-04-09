@@ -3,7 +3,21 @@
 @{
     ViewBag.Title = "OrderDetails";
 }
-<section id="content">
+<section id="intro">
+    <div class="animated bounceInDown introtext"><h1>Bestelling:</h1><h3 style="color: white;">@Model.OrderId</h3></div>
+</section>
+<section id="content" style="padding-top: 50px">
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        @Html.Partial("_KassaMenu")
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
     <div class="container">
         <div class="text-center">
             <table class="table">
@@ -17,7 +31,7 @@
                 <td>Aantal tickets</td>
                 <td>Wijzigen</td>
                 <tbody class="table-striped">
-                        <tr><td>@Model.OrderId</td><td>@Model.Paid</td><td>@Model.PickedUp</td><td>@Model.Email</td><td>@Model.Show.Movie.Name</td><td>@Model.Show.StartTime.TimeOfDay</td><td>@Model.Tickets.Count()</td><td>@Html.ActionLink("Wijzig", "ChangeOrder", "Kassa", new { id = @Model.OrderId, userid = @ViewBag.Userid }, null) </td>
+                    <tr><td>@Model.OrderId</td><td>@Model.Paid</td><td>@Model.PickedUp</td><td>@Model.Email</td><td>@Model.Show.Movie.Name</td><td>@Model.Show.StartTime.TimeOfDay</td><td>@Model.Tickets.Count()</td><td>@Html.ActionLink("Wijzig", "ChangeOrder", "Kassa", new { id = @Model.OrderId, userid = @ViewBag.Userid }, null) </td>
                 </tbody>
             </table>
         </div>

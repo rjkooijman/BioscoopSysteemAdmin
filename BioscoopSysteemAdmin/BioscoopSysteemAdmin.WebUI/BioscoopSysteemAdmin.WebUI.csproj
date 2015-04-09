@@ -166,7 +166,7 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\KassaController.cs" />
-    <Compile Include="Controllers\PlannerController.cs" />
+    <Compile Include="Controllers\BackOfficeController.cs" />
     <Compile Include="Controllers\PrintController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -183,7 +183,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Views\Home\Unauthorized.cshtml" />
-    <Content Include="Views\Planner\VoorstellingToevoegen.cshtml" />
+    <Content Include="Views\Planner\AddShow.cshtml" />
     <Content Include="Scripts\jquery-2.1.3.min.map" />
     <Content Include="Views\Kassa\Order.cshtml" />
     <Content Include="Views\Kassa\ManualSeatSelection.cshtml" />
@@ -199,6 +199,8 @@
     <Content Include="Views\Kassa\Overview.cshtml" />
     <Content Include="Views\Shared\_Empty.cshtml" />
     <Content Include="Views\Shared\_KassaMenu.cshtml" />
+    <Content Include="Views\Kassa\NewSubscriber.cshtml" />
+    <Content Include="Views\Planner\SendNewsLetter.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

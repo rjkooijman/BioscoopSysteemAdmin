@@ -1,0 +1,39 @@
+﻿@model BioscoopSysteemWebsite.Domain.Entities.Subscriber
+@{
+    ViewBag.Title = "NewSubscriber";
+}
+
+<section id="intro">
+    <div class="animated bounceInDown introtext"><h1>Bestelling:</h1><h3 style="color: white;">Nieuw Abonnement</h3></div>
+</section>
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    @Html.Partial("_KassaMenu")
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<section id="content">
+    <div class="container">
+        @using (Html.BeginForm("NewSubscriber", "Kassa", FormMethod.Post, new { enctype = "multipart/form-data" })) {
+            <p style="color:green;">@ViewBag.SubscriberSucces</p>
+            <p style="color:red;">@ViewBag.SubscriberError</p>
+            <div class="form-group">
+                @Html.ValidationSummary()
+                <label for="voornaam">Voornaam:</label>@Html.TextBoxFor(x => x.Voornaam, new { @class = "search" }) <br />
+                <label for="achternaam">Achternaam:</label>@Html.TextBoxFor(x => x.Achternaam, new { @class = "search" })<br />
+                <label for="straat">Straat</label>@Html.TextBoxFor(x => x.Straat, new { @class = "search" })<br />
+                <label for="huisnummer">Huisnummer</label>@Html.TextBoxFor(x => x.Huisnummer, new { @class = "search" })<br />
+                <label for="postcode">Postcode:</label>@Html.TextBoxFor(x => x.Postcode, new { @class = "search" })<br />
+                <label for="woonplaats">Woonplaats:</label>@Html.TextBoxFor(x => x.Woonplaats, new { @class = "search" })<br />
+                <label>Image</label><input type="file" name="Image" size="40" />
+            </div>
+            <input type="submit" class="submitbtn" value="bevestig" />
+        }
+    </div>
+</section>
+

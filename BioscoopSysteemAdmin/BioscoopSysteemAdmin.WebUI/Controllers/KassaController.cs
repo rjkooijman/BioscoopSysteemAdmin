@@ -7,10 +7,8 @@ using System.Web.Mvc;
 using BioscoopSysteemWebsite.Domain.Entities;
 using System.Diagnostics.CodeAnalysis;
 
-namespace BioscoopSysteemAdmin.WebUI.Controllers
-{
-    public class KassaController : Controller
-    {
+namespace BioscoopSysteemAdmin.WebUI.Controllers {
+    public class KassaController : Controller {
         private IRepository repo;
         private PrintController print;
 
@@ -18,30 +16,25 @@ namespace BioscoopSysteemAdmin.WebUI.Controllers
             this.repo = repo;
             print = new PrintController(repo);
         }
-
-        public ActionResult Overview(int id, int userid)
+        public ActionResult Overview(int id)
             //Gemaakt door: Frank Molengraaf
-         {
-             if (repo.GetUserById(userid).Role.Role == "Kassa") {
-                int dayOffset = id;
-                dayOffset = dayOffset > 6 ? 6 : dayOffset;
-                DateTime date;
-                if (dayOffset == 0) {
-                    date = DateTime.Now;
-                } else {
-                    date = DateTime.Now.AddDays(dayOffset);
-                }
-                Dictionary<Movie, List<Show>> listsOfMovies = repo.GetAllShows()
-                    .Where(r => r.StartTime > date && r.StartTime < date.AddDays(1))
-                    .GroupBy(r => r.Movie)
-                    .ToDictionary(group => group.Key, group => group.ToList());
+               {
+            int dayOffset = id;
+            dayOffset = dayOffset > 6 ? 6 : dayOffset;
+            DateTime date;
+            if (dayOffset == 0) {
+                date = DateTime.Now;
+            } else {
+                date = DateTime.Now.AddDays(dayOffset);
+            }
+            Dictionary<Movie, List<Show>> listsOfMovies = repo.GetAllShows()
+                .Where(r => r.StartTime > date && r.StartTime < date.AddDays(1))
+                .GroupBy(r => r.Movie)
+                .ToDictionary(group => group.Key, group => group.ToList());
 
-                ViewBag.Userid = userid;
-                ViewBag.SelectId = id;
-                return View("Overview", listsOfMovies);
-             } else {
-                 return View("~/Views/Home/Unautorized.cshtml");
-             }
+            ViewBag.Userid = 2;
+            ViewBag.SelectId = id;
+            return View("Overview", listsOfMovies);
         }
 
         [HttpGet]
@@ -57,6 +50,7 @@ namespace BioscoopSysteemAdmin.WebUI.Controllers
                     x++;
                 }
                 string allActors = string.Join(", <br />", actorspermovie);
+                ViewBag.FilmBannerPath = show.Movie.BannerImage;
                 ViewBag.Actors = allActors;
                 ViewBag.Tickets = getAvailableTickets(show);
 
@@ -104,8 +98,8 @@ namespace BioscoopSysteemAdmin.WebUI.Controllers
                     Session["OrderID"] = order.OrderId;
                     return View("ManualSeatSelection", order);
                 } else {
-                        @ViewBag.order = "Vul alle velden in.";
-                    return View("Order", new List<Show> { repo.GetShowByID(id) });
+                    @ViewBag.order = "Vul alle velden in.";
+                    return View("Order", id);
                 }
             } else {
                 return View("~/Views/Home/Unauthorized.cshtml");
@@ -183,64 +177,78 @@ namespace BioscoopSysteemAdmin.WebUI.Controllers
         }
 
         public ActionResult ChangeOrder(int id, int userid) {
-            ViewBag.SeatError = "Deze stoelen zijn nog vrij";
-            Order order = repo.GetOrderByID(id);
-            Order orderx = new Order(order.Show, false);
-            List<Seat> seatList = order.Show.AssignedSeats;
-            List<Ticket> ticketList = order.Tickets;
-            List<TicketSoort> ticketSoortList = new List<TicketSoort>();
-            List<int> ticketIdList = new List<int>();
-            List<int?> seatIdList = new List<int?>();
-            int aantal = 0;
-            if (ticketList.Count() > 0) {
-                foreach (Ticket tick in ticketList) {
-                    ticketSoortList.Add(tick.TicketSoort);
-                }
-                for (int i = 0; i < ticketList.Count(); i++) {
-                    for (int x = 0; x < ticketSoortList.Count(); i++) {
-                        aantal = ticketSoortList.Where(ts => ts.TicketSoortID == ticketSoortList[x].TicketSoortID).Count();
+            if (repo.GetUserById(userid).Role.Role == "Kassa") {
+                ViewBag.SeatError = "Deze stoelen zijn nog vrij";
+                Order order = repo.GetOrderByID(id);
+                Order orderx = new Order(order.Show, false);
+                List<Seat> seatList = order.Show.AssignedSeats;
+                List<Ticket> ticketList = order.Tickets;
+                List<TicketSoort> ticketSoortList = new List<TicketSoort>();
+                List<int> aantal = new List<int>();
+                List<int> ticketIdList = new List<int>();
+                List<int?> seatIdList = new List<int?>();
+                if (ticketList.Count() > 0) {
+                    foreach (Ticket tick in ticketList) {
+                        ticketSoortList.Add(tick.TicketSoort);
                     }
-                        orderx.AddTicket(ticketList[i].TicketSoort, aantal);
-                }
-                for (int x = 0; x < ticketList.Count(); x++) {
+                    for (int i = 0; i < ticketList.Count(); i++) {
+                        aantal.Add(ticketSoortList.Where(ts => ts.TicketSoortID == ticketSoortList[i].TicketSoortID).Count());
+                    }
+                    ticketSoortList = ticketSoortList.Distinct().ToList();
+
+                    for (int i = 0; i < ticketSoortList.Count(); i++) {
+                        orderx.AddTicket(ticketSoortList[i], aantal[i]);
+                    }
+
+                    for (int x = 0; x < ticketList.Count(); x++) {
                         ticketIdList.Add(ticketList[x].TicketId);
                         seatIdList.Add(ticketList[x].SeatId);
-                }
-                    
-                if (ticketList.Count() > 0) {
-                    for (int i = 0; i < ticketList.Count(); i++) {
+                    }
+                    for (int i = 0; i < ticketIdList.Count(); i++) {
                         repo.ChangeTicket(ticketIdList[i], seatIdList[i]);
                     }
+
+                    order.Tickets = orderx.Tickets;
+                    Session["OrderID"] = order.OrderId;
+                    Session["UserID"] = userid;
+
+                    return View("ManualSeatSelection", order);
+                } else {
+                    return View("Reservation", order);
                 }
-                
-                    
+            } else {
+                return View("~/Views/Home/Unauthorized.cshtml");
             }
-            
-            order.Tickets = orderx.Tickets;
-            Session["OrderID"] = order.OrderId;
-            Session["UserID"] = userid;
-            return View("ManualSeatSelection", order);
-            //foreach (Show show in showList) {
-            //    foreach (Seat seat in show.AssignedSeats) {
-            //        foreach (Seat seatx in order.Show.AssignedSeats) {
-            //            if (seat.Row == seatx.Row) {
-            //                if (seat.Number == seatx.Number) {
-            //                    foreach (Ticket ticket in order.Tickets) {
-            //                        order.AddTicket(ticket.TicketSoort, order.Tickets.Where(t => t.TicketSoort == ticket.TicketSoort).Count());
-            //                        order.Tickets.Remove(ticket);
-            //                    }
-            //                    Session["OrderID"] = order.OrderId;
-            //                    Session["UserID"] = userid;
-            //                    return View("ManualSeatSelection", order);
-            //                } else {
-            //                    return View("Reservation");
-            //                }
-            //            } else {
-            //                return View("Reservation");
-            //            }
-            //        }
-            //    }
-            //} return View("Reservation");
+        }
+
+        [HttpGet]
+        public ViewResult NewSubscriber() {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult NewSubscriber(Subscriber subscriber, HttpPostedFileBase image = null) {
+            if (ModelState.IsValid) {
+                if (image != null) {
+                    subscriber.ImageMimeType = image.ContentType;
+                    subscriber.ImageData = new byte[image.ContentLength];
+                    image.InputStream.Read(subscriber.ImageData, 0, image.ContentLength);
+                }
+                if (repo.GetSubscriberByName(subscriber) == null) {
+                    repo.AddSubscriber(subscriber);
+                    ViewBag.SubscriberSucces = "Abonnement is aangemaakt.";
+                    print.SubscriberPrint(subscriber);
+                    return View();
+                } else {
+                    ViewBag.SubscriberError = "Dit abonnement bestaat al.";
+                    return View();
+                }
+
+
+            } else {
+                ViewBag.SubscriberError = "Er is iets fout gegaan, probeer het opnieuw.";
+                return View();
+            }
         }
 
         [ExcludeFromCodeCoverage]
@@ -249,28 +257,24 @@ namespace BioscoopSysteemAdmin.WebUI.Controllers
             List<TicketSoort> aangebodenTickets = new List<TicketSoort>();
 
             //Nieuw
-                aangebodenTickets.Add(tickets.First(r => r.Naam.Equals("Normaal tickets")));
+            aangebodenTickets.Add(tickets.First(r => r.Naam.Equals("Normaal tickets")));
 
-                if (show.PopcornArrangement)
-                {
-                    aangebodenTickets.Add(tickets.First(r => r.Naam.Equals("Popcorn arrangement")));
-                }
-                if (!show.Holiday && (show.StartTime.DayOfWeek > DayOfWeek.Sunday && show.StartTime.DayOfWeek < DayOfWeek.Friday))
-                {
-                    aangebodenTickets.Add(tickets.First(r => r.Naam.Equals("Senioren tickets")));
-                }
-                if (show.StartTime.DayOfWeek > DayOfWeek.Sunday && show.StartTime.DayOfWeek < DayOfWeek.Friday)
-                {
-                    aangebodenTickets.Add(tickets.First(r => r.Naam.Equals("Student tickets")));
+            if (show.PopcornArrangement) {
+                aangebodenTickets.Add(tickets.First(r => r.Naam.Equals("Popcorn arrangement")));
+            }
+            if (!show.Holiday && (show.StartTime.DayOfWeek > DayOfWeek.Sunday && show.StartTime.DayOfWeek < DayOfWeek.Friday)) {
+                aangebodenTickets.Add(tickets.First(r => r.Naam.Equals("Senioren tickets")));
+            }
+            if (show.StartTime.DayOfWeek > DayOfWeek.Sunday && show.StartTime.DayOfWeek < DayOfWeek.Friday) {
+                aangebodenTickets.Add(tickets.First(r => r.Naam.Equals("Student tickets")));
 
-                }
-                if (show.Movie.Genre.Equals("Kinderfilm") && show.Movie.Language.Equals("Nederlands") && show.StartTime.Hour < 18)
-                {
-                    aangebodenTickets.Add(tickets.First(r => r.Naam.Equals("Kinder tickets")));
-                }
-                if (show.VIP) {
-                    aangebodenTickets.Add(tickets.First(r => r.Naam.Equals("VIP tickets")));
-                }
+            }
+            if (show.Movie.Genre.Equals("Kinderfilm") && show.Movie.Language.Equals("Nederlands") && show.StartTime.Hour < 18) {
+                aangebodenTickets.Add(tickets.First(r => r.Naam.Equals("Kinder tickets")));
+            }
+            if (show.VIP) {
+                aangebodenTickets.Add(tickets.First(r => r.Naam.Equals("VIP tickets")));
+            }
             return aangebodenTickets;
         }
     }

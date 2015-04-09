@@ -24,7 +24,7 @@
 </script>
 <section id="content">
     <div class="container">
-        @using (Html.BeginForm("VoorstellingToevoegen", "Planner", FormMethod.Post)) {
+        @using (Html.BeginForm("AddShow", "BackOffice", FormMethod.Post)) {
             <label for="film">Kies een film</label>@Html.DropDownListFor(x => x.MovieId, movieListSelect, new { @class = "form-control" })
 
             <br />
@@ -44,7 +44,7 @@
             <label for="holiday">Vakantie</label><div class="checkbox-inline">@Html.CheckBoxFor(x => x.Holiday, true)</div>
 
 
-            <input type="submit" value="Voorstelling toevoegen" />
+            <input type="submit" class="submitbtn" value="Voorstelling toevoegen" />
         }
     </div>
 </section>

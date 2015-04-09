@@ -6,7 +6,7 @@
 
 <section id="intro">
     <div class="container">
-        <div class="animated bounceInDown introtext"><h1>Selecteer waar je wilt zitten</h1></div>
+        <div class="animated bounceInDown introtext"><h1>Selecteer de nieuwe plekken</h1></div>
     </div>
 </section>
 <section id="ManualSeatSelection">
@@ -23,10 +23,10 @@
 
             for (int y = 0; y < roomGrid.GetLength(0); y++) {<div id="row_@y" class="roomRow">
                 @for (int x = 0; x < roomGrid[y].Count(); x++) {<div id="@(y)_@x" class="seatSquare clickableSeat">
-                @if (roomGrid[y][x] > 0) {
-                    <img class="seatSquareFilled" src="~/Resources/Seat_filled.png" />
-                }
-            </div>}
+            @if (roomGrid[y][x] > 0) {
+                <img class="seatSquareFilled" src="~/Resources/Seat_filled.png" />
+            }
+        </div>}
             </div>
             }
         }
@@ -37,7 +37,6 @@
     <br />
     <br />
     <div id="submitSeats" class="submitbtn">Bevestigen</div>
-
 </section>
 
 <style>

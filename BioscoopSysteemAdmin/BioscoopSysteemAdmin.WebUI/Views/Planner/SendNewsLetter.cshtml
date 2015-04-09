@@ -1,0 +1,19 @@
+﻿
+@{
+    ViewBag.Title = "SendNewsLetter";
+}
+
+<section id="content">
+    <div class="container">
+        <p style="color:green;">@ViewBag.MailSucces</p>
+        <p style="color:red;">@ViewBag.MailError</p>
+        @using (Html.BeginForm("SendNewsLetter", "BackOffice", FormMethod.Post, new { enctype = "multipart/form-data" })) {
+            <label for="subject">Onderwerp</label><input type="text" name="Subject" placeholder="Voer een onderwerp in" />
+            <label for="text">Tekst</label><textarea rows="5" cols="50" placeholder="Voer de berichttekst is" name="text"></textarea>
+            <label for="attachment">Bijlage:</label><input type="file" name="Attachment" />
+
+            <input type="submit" class="submitbtn" value="Verzend email" />
+        }
+
+    </div>
+</section>

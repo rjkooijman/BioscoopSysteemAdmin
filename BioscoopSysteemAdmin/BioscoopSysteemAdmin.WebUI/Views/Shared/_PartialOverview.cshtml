@@ -24,26 +24,23 @@
             <div class="col-md-2">
                 <div class="row">
                     <p>
-                            <b>Gesproken taal:</b>
+                        <b>Gesproken taal:</b>
                         <br /> @movieShows.Key.Language
                     </p>
                     <p>
-                            <b>Ondertiteld:</b>
+                        <b>Ondertiteld:</b>
                         <br /> @movieShows.Key.Subtitle
                     </p>
                     <p>
                         <b>3D:</b>
                         @if (@movieShows.Key.Type == true) {
-                                @:Ja
-
+                            @:Ja
                         } else {
-                                @:Nee
+                            @:Nee
                         }
                         <br />
-                            <b>Kijkwijzer:</b>
-                        <br /> 
-                        
-                        @if (@movieShows.Key.Pegi.All == true) {
+                        <b>Kijkwijzer:</b>
+                        }<br /> @if (@movieShows.Key.Pegi.All == true) {
                             <img src="/resources/kijkwijzer_AL.png" style="height: 37px; width: 37px;" />
                         }
                         @if (@movieShows.Key.Pegi.SixPlus == true) {
@@ -83,4 +80,3 @@
         &nbsp;
     </p>
 }
-

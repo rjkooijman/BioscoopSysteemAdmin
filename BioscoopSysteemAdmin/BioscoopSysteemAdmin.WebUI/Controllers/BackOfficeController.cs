@@ -3,15 +3,17 @@ using BioscoopSysteemWebsite.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 
 namespace BioscoopSysteemAdmin.WebUI.Controllers {
-    public class PlannerController : Controller {
+    public class BackOfficeController : Controller {
 
         private IRepository repo;
 
-        public PlannerController(IRepository repo) {
+        public BackOfficeController(IRepository repo) {
             this.repo = repo;
         }
 
@@ -22,7 +24,7 @@ namespace BioscoopSysteemAdmin.WebUI.Controllers {
         }
 
         [HttpGet]
-        public ActionResult VoorstellingToevoegen(int userid) {
+        public ActionResult AddShow(int userid) {
             List<LadiesNight> ladiesNightList = repo.GetAllLadiesNights().Where(l => l.LadiesNightDay.DayOfYear > DateTime.Now.DayOfYear).ToList();
             ViewBag.Userid = userid;
             ViewBag.ladiesNightSelect = ladiesNightList;
@@ -32,7 +34,7 @@ namespace BioscoopSysteemAdmin.WebUI.Controllers {
         }
 
         [HttpPost]
-        public ActionResult VoorstellingToevoegen(Show show) {
+        public ActionResult AddShow(Show show) {
             DateTime date = DateTime.Parse(Request["datum"]);
             DateTime newDate = date.Add(TimeSpan.Parse(Request["starttijd"]));
             show.Movie = repo.GetMovieById(show.MovieId);
@@ -61,7 +63,7 @@ namespace BioscoopSysteemAdmin.WebUI.Controllers {
             }
 
             //Check of de film nog beschikbaar is
-            if(newDate.Date < show.Movie.EndDate.Date) {
+            if (newDate.Date < show.Movie.EndDate.Date) {
                 foreach (Show x in showList) {
                     Double doubleDuration = Double.Parse(show.Movie.Duration.ToString());
 
@@ -89,6 +91,36 @@ namespace BioscoopSysteemAdmin.WebUI.Controllers {
             return View("Index", "Home");
         }
 
+        [HttpGet]
+        public ViewResult SendNewsletter(int userid) {
+            if (repo.GetUserById(userid).Role.Role == "Back office") {
+                return View();
+            } else {
+                return View("~/Views/Home/Unauthorized.cshtml");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult SendNewsLetter() {
+            string onderwerp = Request["Subject"];
+            string text = Request["Text"];
+            HttpPostedFileBase file = Request.Files["Attachment"];
+
+
+            List<Mail> mailList = repo.GetAllMails().Where(m => m.Voornaam != null).ToList();
+            foreach (Mail mail in mailList) {
+                if (file != null) {
+                    Attachment attachment = new Attachment(file.InputStream, file.FileName);
+                    mail.SendNewsLetter(onderwerp, text, attachment);
+                } else {
+                    ViewBag.MailError = "FAAL";
+                    return View();
+                }
+            }
+            ViewBag.MailSucces = "GOEDZO";
+            return View();
+        }
+
         private List<SelectListItem> MovieSelect() {
             List<SelectListItem> movieSelect = new List<SelectListItem>();
             List<Movie> availableMovies = repo.GetAllMovies().Where(m => m.StartDate < DateTime.Now && m.EndDate > DateTime.Now).ToList();
@@ -104,8 +136,8 @@ namespace BioscoopSysteemAdmin.WebUI.Controllers {
 
         private List<SelectListItem> RoomSelect() {
             List<SelectListItem> roomSelect = new List<SelectListItem>();
-            List<Room> allRooms =  repo.GetAllRooms().ToList();
-             SelectListItem x = null;
+            List<Room> allRooms = repo.GetAllRooms().ToList();
+            SelectListItem x = null;
             foreach (Room room in allRooms) {
                 for (int i = 0; i < allRooms.Count(); i++) {
                     x = new SelectListItem() { Text = room.RoomNumber.ToString(), Value = room.RoomNumber.ToString() };
