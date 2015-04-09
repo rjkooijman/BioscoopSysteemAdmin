@@ -11,7 +11,7 @@
 <section id="content">
     <div class="container">
         @if (Session["Language"].Equals(false)) {
-            <div class="paybtn">@Html.ActionLink("Reserveren", "Reserved", new { Model.OrderId }, null)</div>
+            <div class="paybtn">@Html.ActionLink("Reserveren", "Reservering", new { Model.OrderId }, null)</div>
             <div class="paybtn">@Html.ActionLink("Betalen met Credit Card", "CreditCardPayment", new { Model.OrderId }, null)</div>
             <div class="paybtn">@Html.ActionLink("Betalen met iDeal", "iDealChooseBank", new { Model.OrderId }, null)</div>
         }

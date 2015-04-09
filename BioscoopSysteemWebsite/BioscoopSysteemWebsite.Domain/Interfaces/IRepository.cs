@@ -53,7 +53,7 @@ namespace BioscoopSysteemWebsite.Domain.Interfaces {
         //Geschreven door Robert-Jan Kooijman
         IEnumerable<Mail> GetAllMails();
 
-        IEnumerable<TicketSoort> GetTicketSoorten();
+        List<TicketSoort> GetTicketSoorten();
 
         User GetUserById(int id);
 
@@ -77,6 +77,10 @@ namespace BioscoopSysteemWebsite.Domain.Interfaces {
 
         void AddSubscriber(Subscriber subscriber);
 
-        Subscriber GetSubscriberByName(Subscriber subscriber);
+        bool DuplicateSubscriber(Subscriber subscriber);
+
+        List<Subscriber> GetAllSubscribers();
+
+        void Order(Order order);
     }
 }

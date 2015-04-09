@@ -2,16 +2,30 @@
 @{
     ViewBag.Title = "Ticket toevoegen";
 }
-
-<h2>TicketToevoegen</h2>
-@ViewBag.TicketError
-<div class="form-group form-inline">
-    @using (Html.BeginForm("TicketToevoegen", "Admin", FormMethod.Post)) { 
-        <label for="Ticketname">Ticket naam</label>@Html.TextBoxFor(x => x.Naam, new { @class = "form-control"}) <br />
-        <label for="Price">Prijs</label>@Html.TextBox("prijs") @Html.TextBox("prijsDecimal", "00")
-        <label for="EnTicketname">Engelse ticket naam</label>@Html.TextBoxFor(x => x.EnglishTicketName, new { @class = "form-control" })<br />
-        <input type="hidden" name="userId" value="@ViewBag.Userid" />
+<section id="content">
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        @Html.Partial("_ManagerMenu")
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+<div class="container">
+    <div class="form-group form-inline">
+        @using (Html.BeginForm("TicketToevoegen", "Admin", FormMethod.Post)) { 
+            <table>
+                <tr><td>Ticketnaam:</td><td>@Html.TextBoxFor(x => x.Naam, new { @class = "search" })</td></tr>
+                <tr><td>Prijs:</td><td>@Html.TextBox("prijs", null, new { @class = "search" }) @Html.TextBox("prijsDecimal", null, new { @class = "search" }) </td></tr>
+                <tr><td>Engelse Ticketnaam:</td><td>@Html.TextBoxFor(x => x.EnglishTicketName, new { @class = "search" })</td></tr>
+            </table>
+            <input type="hidden" name="userId" value="@ViewBag.Userid" />
     
-        <input type="submit" value="Ticket toevoegen"  class="controlbtn"/>
-}
+            <input type="submit" value="Ticket toevoegen"  class="submitbtn"/>
+    }
+    </div>
 </div>
+</section>

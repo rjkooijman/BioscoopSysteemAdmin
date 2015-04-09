@@ -63,6 +63,11 @@ namespace BioscoopSysteemWebsite.Domain.Implementations
             return context.Shows.Where(x => x.ShowID == id).FirstOrDefault();
         }
 
+        public void Order(Order order) {
+            Order changedorder = context.Orders.Where(o => o.OrderId == order.OrderId).First();
+            changedorder = order;
+            context.SaveChanges();
+        }
         //Gemaakt door: Ricardo Jobse
         public IEnumerable<Order> Orders
         {
@@ -164,9 +169,9 @@ namespace BioscoopSysteemWebsite.Domain.Implementations
         }
 
         [ExcludeFromCodeCoverage]
-        public IEnumerable<TicketSoort> GetTicketSoorten()
+        public List<TicketSoort> GetTicketSoorten()
         {
-            return context.TicketSoort;
+            return context.TicketSoort.ToList();
         }
 
         [ExcludeFromCodeCoverage]
@@ -216,8 +221,20 @@ namespace BioscoopSysteemWebsite.Domain.Implementations
             context.SaveChanges();
         }
 
-        public Subscriber GetSubscriberByName(Subscriber subscriber) {
-            return context.Subscribers.Where(s => s == subscriber).First();
+        public bool DuplicateSubscriber(Subscriber subscriber) {
+            bool b = false;
+            foreach(Subscriber sub in context.Subscribers) {
+                if(sub == subscriber){
+                    b = true;
+                } else {
+                    b = false;
+                }
+            }
+            return b;
+        }
+
+        public List<Subscriber> GetAllSubscribers() {
+            return context.Subscribers.ToList();
         }
     }
 }

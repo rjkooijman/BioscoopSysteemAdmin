@@ -1,0 +1,13 @@
+﻿<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <ul class="nav navbar-nav navbar-right">
+        <li>
+            @Html.ActionLink("Ticket overzicht", "Overview", "Admin", new { userid = @ViewBag.Userid }, null)
+        </li>
+        <li>
+            @Html.ActionLink("Ticket toevoegen", "TicketToevoegen", "Admin", new { userid = @ViewBag.Userid }, null)
+        </li>
+        <li>
+            @Html.ActionLink("Uitloggen", "Index", "Home")
+        </li>
+    </ul>
+</div>

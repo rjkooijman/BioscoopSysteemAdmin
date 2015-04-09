@@ -4,10 +4,13 @@
             @Html.ActionLink("Reservering ophalen", "Reservation", "Kassa", new { userid = 2 }, null)
         </li>
         <li>
-            @Html.ActionLink("Voorstellingsoverzicht", "Overview", "Kassa", new { id = 0, userid = 2 }, null)
+            @Html.ActionLink("Voorstellings overzicht", "Overview", "Kassa", new { id = 0, userid = 2 }, null)
         </li>
         <li>
-            @Html.ActionLink("Nieuw abbonement", "NewSubscriber", "Kassa")
+            @Html.ActionLink("Nieuw abonnement", "NewSubscriber", "Kassa")
+        </li>
+        <li>
+            @Html.ActionLink("Uitloggen", "Index", "Home")
         </li>
     </ul>
 </div>

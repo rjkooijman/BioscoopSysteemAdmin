@@ -3,6 +3,20 @@
     ViewBag.Title = "Gelukt!";
 }
 
-
-<p>Het ticket is succesvol toegevoegd!</p>
-@Html.ActionLink("Ga terug", "Overview", "Admin", new { userid = @ViewBag.Userid}, null)
+<section id="content">
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        @Html.Partial("_ManagerMenu")
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+    <p>Het ticket is succesvol toegevoegd!</p>
+    @Html.ActionLink("Ga terug", "Overview", "Admin", new { userid = @ViewBag.Userid }, null)
+</div>
+</section>

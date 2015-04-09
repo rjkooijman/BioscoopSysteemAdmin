@@ -87,13 +87,14 @@ namespace BioscoopSysteemAdmin.WebUI.Controllers {
             }
 
             repo.AddShow(show);
-
-            return View("Index", "Home");
+            ViewBag.ShowSucces = "De voorstelling is toegevoegd";
+            return View("Overview");
         }
 
         [HttpGet]
         public ViewResult SendNewsletter(int userid) {
             if (repo.GetUserById(userid).Role.Role == "Back office") {
+                ViewBag.Userid = userid;
                 return View();
             } else {
                 return View("~/Views/Home/Unauthorized.cshtml");
@@ -113,11 +114,11 @@ namespace BioscoopSysteemAdmin.WebUI.Controllers {
                     Attachment attachment = new Attachment(file.InputStream, file.FileName);
                     mail.SendNewsLetter(onderwerp, text, attachment);
                 } else {
-                    ViewBag.MailError = "FAAL";
+                    ViewBag.MailError = "Er is wat fout gegaan, probeer het opnieuw.";
                     return View();
                 }
             }
-            ViewBag.MailSucces = "GOEDZO";
+            ViewBag.MailSucces = "De nieuwsbrief is met succes verstuurd.";
             return View();
         }
 

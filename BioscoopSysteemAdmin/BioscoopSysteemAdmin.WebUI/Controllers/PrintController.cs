@@ -125,7 +125,7 @@ namespace BioscoopSysteemAdmin.WebUI.Controllers {
                 orderInfoTable.SpacingBefore = 10;
                 orderInfoTable.SpacingAfter = 10;
                 orderInfoTable.DefaultCell.Border = 0;
-                orderInfoTable.SetWidths(new int[] { 1, 10 });
+                orderInfoTable.SetWidths(new int[] { 1, 2 });
 
 
                 orderInfoTable.AddCell(new Phrase("Naam", subTitleFont));

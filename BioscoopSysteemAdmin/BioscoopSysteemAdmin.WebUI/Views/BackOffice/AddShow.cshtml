@@ -1,0 +1,46 @@
+﻿@model BioscoopSysteemWebsite.Domain.Entities.Show
+@using BioscoopSysteemWebsite.Domain.Entities
+@{
+    List<SelectListItem> movieListSelect = ViewBag.MovieSelect;
+    List<SelectListItem> roomListSelect = ViewBag.RoomSelect;
+    List<LadiesNight> ladiesNightList = ViewBag.ladiesNightList;
+    ViewBag.Title = "Voorstelling toevoegen";
+}
+
+<section id="content">
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        @Html.Partial("_BackOfficeMenu")
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        @using (Html.BeginForm("AddShow", "BackOffice", FormMethod.Post)) {
+            <label for="film">Kies een film</label>
+
+            <br />
+            @ViewBag.RoomError
+            <table>
+                <tr><td>Kies een film:</td><td>@Html.DropDownListFor(x => x.MovieId, movieListSelect, new { @id = "search", @style = "color:black;" })</td></tr>
+                <tr><td>Kies een zaal:</td><td style="text-align:left;">@Html.DropDownListFor(x => x.RoomId, roomListSelect, new { @id = "search", @style = "color:black;" })</td></tr>
+                <tr><td>Popcornarrangement:</td><td>@Html.CheckBoxFor(x => x.PopcornArrangement, true)</td></tr>
+                <tr><td>Vakantie:</td><td>@Html.CheckBoxFor(x => x.Holiday, true)</td></tr>
+                <tr><td>Vip-kaartje</td><td>@Html.CheckBoxFor(x => x.VIP, true)</td></tr>
+                <tr><td>Start datum:</td><td><input type="date" name="datum" /></td></tr>
+                <tr><td>Starttijd:</td><td><input type="time" name="starttijd" /></td></tr>
+            </table>
+            
+            <br />
+            <br />
+            
+
+
+            <input type="submit" class="submitbtn" value="Voorstelling toevoegen" />
+        }
+    </div>
+</section>

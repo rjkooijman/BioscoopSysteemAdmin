@@ -312,7 +312,7 @@ namespace BioscoopSysteemWebsite.WebUI.Controllers
             }
 
             order.AssignManualSeats(rowNumbers, seatNumbers);
-            repo.UpdateOrder(order);
+            repo.Order(order);
 
             return View("Payment", order);
         }
@@ -321,6 +321,23 @@ namespace BioscoopSysteemWebsite.WebUI.Controllers
         public ActionResult iDealChooseBank(Order order)
         {
             return View(order);
+        }
+
+        public ActionResult Reservering(Order order) {
+            order = repo.GetOrderByID(order.OrderId);
+            ViewBag.totalPrice = order.GetTotalPrice();
+            if (!order.Paid)
+            {
+                if (Session["Language"].Equals(false))
+                {
+                    @ViewBag.paid = "U heeft nog niet betaald, u kunt uw reservering betalen en ophalen bij de touchscreens in onze vestiging.";
+                }
+                else
+                {
+                    @ViewBag.paid = "You have not paid yet, you can pay your order and pick it up at the touch screens in our establishment.";
+                }
+            }
+            return View("Reserved", order);
         }
 
         public ActionResult iDealPayment()

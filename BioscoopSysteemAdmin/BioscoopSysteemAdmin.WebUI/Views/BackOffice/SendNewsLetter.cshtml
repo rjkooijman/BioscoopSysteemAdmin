@@ -1,0 +1,32 @@
+﻿
+@{
+    ViewBag.Title = "SendNewsLetter";
+}
+
+<section id="content">
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        @Html.Partial("_BackOfficeMenu")
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <p style="color:green;">@ViewBag.MailSucces</p>
+        <p style="color:red;">@ViewBag.MailError</p>
+        @using (Html.BeginForm("SendNewsLetter", "BackOffice", FormMethod.Post, new { enctype = "multipart/form-data" })) {
+            <table>
+                <tr><td>Onderwerp:</td><td style="text-align:left;"><input type="text" name="Subject" placeholder="Voer een onderwerp in" style="width:200px;"/></td></tr>
+                <tr><td>Tekst:</td><td><textarea rows="5" cols="50" placeholder="Voer de berichttekst is" name="text" class="textarea"></textarea></td></tr>
+                <tr><td>Bijlage:</td><td><input type="file" name="Attachment" /></td></tr>
+            </table>
+
+            <input type="submit" class="submitbtn" value="Verzend email" />
+        }
+
+    </div>
+</section>

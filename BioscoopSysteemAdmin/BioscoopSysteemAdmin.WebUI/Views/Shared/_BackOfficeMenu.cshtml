@@ -1,0 +1,16 @@
+﻿<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <ul class="nav navbar-nav navbar-right">
+        <li>
+            @Html.ActionLink("Voorstellings overzicht", "Overview", "BackOffice", new { userid = @ViewBag.Userid }, null)
+        </li>
+        <li>
+            @Html.ActionLink("Voorstelling toevoegen", "AddShow", "BackOffice", new { userid = @ViewBag.Userid }, null)
+        </li>
+        <li>
+            @Html.ActionLink("Nieuwsbrief versturen", "SendNewsLetter", "BackOffice", new { userid = @ViewBag.Userid}, null)
+        </li>
+        <li>
+            @Html.ActionLink("Uitloggen", "Index", "Home")
+        </li>
+    </ul>
+</div>

@@ -4,7 +4,18 @@
     ViewBag.Title = "Overview";
 }
 
-<h2>Overview</h2>
+<section id="content">
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        @Html.Partial("_ManagerMenu")
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 <div class="container">
     <div class="text-center">
         <table class="table">
@@ -20,5 +31,5 @@
             </tbody>
         </table>
     </div>
-    @Html.ActionLink("Ticket toevoegen", "TicketToevoegen", "Admin", new { userid = @ViewBag.Userid }, null)
 </div>
+</section>

@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BioscoopSysteemAdmin.WebUI", "BioscoopSysteemAdmin.WebUI\BioscoopSysteemAdmin.WebUI.csproj", "{EE0A3E9A-BD2C-40F2-BAD6-609F0F123E69}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BioscoopSysteemWebsite.Domain", "..\BioscoopSysteemWebsite\BioscoopSysteemWebsite.Domain\BioscoopSysteemWebsite.Domain.csproj", "{5379B036-D6D9-48BB-8788-300A609F031B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BioscoopSysteemAdmin.Test", "UnitTestProject1\BioscoopSysteemAdmin.Test.csproj", "{FD4320B1-B00F-4E88-87BC-56420420AB91}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{5379B036-D6D9-48BB-8788-300A609F031B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5379B036-D6D9-48BB-8788-300A609F031B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5379B036-D6D9-48BB-8788-300A609F031B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD4320B1-B00F-4E88-87BC-56420420AB91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD4320B1-B00F-4E88-87BC-56420420AB91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD4320B1-B00F-4E88-87BC-56420420AB91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD4320B1-B00F-4E88-87BC-56420420AB91}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

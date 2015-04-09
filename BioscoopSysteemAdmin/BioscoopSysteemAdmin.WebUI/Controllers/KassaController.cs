@@ -96,6 +96,7 @@ namespace BioscoopSysteemAdmin.WebUI.Controllers {
                     order.UserID = 4;
                     repo.AddOrder(order);
                     Session["OrderID"] = order.OrderId;
+                    Session["UserId"] = userid;
                     return View("ManualSeatSelection", order);
                 } else {
                     @ViewBag.order = "Vul alle velden in.";
@@ -128,12 +129,17 @@ namespace BioscoopSysteemAdmin.WebUI.Controllers {
             }
 
             order.AssignManualSeats(rowNumbers, seatNumbers);
-            repo.UpdateOrder(order);
-
-            return View("Payment", order);
+            repo.Order(order);
+            if (order.Paid == true) {
+                ViewBag.OrderChange = "De stoelen zijn gewijzigd";
+                return View("OrderDetails", order);
+            } else {
+                return View("Payment", order);
+            }
         }
 
-        public ViewResult Pay(Order order, int userid) {
+        public ViewResult Pay(Order order) {
+            int userid = (int)Session["Userid"];
             if (repo.GetUserById(userid).Role.Role == "Kassa") {
                 //Call the update order method
                 int orderid = int.Parse(order.OrderId.ToString());
@@ -211,7 +217,7 @@ namespace BioscoopSysteemAdmin.WebUI.Controllers {
                     order.Tickets = orderx.Tickets;
                     Session["OrderID"] = order.OrderId;
                     Session["UserID"] = userid;
-
+                    repo.Order(order);
                     return View("ManualSeatSelection", order);
                 } else {
                     return View("Reservation", order);
@@ -234,7 +240,7 @@ namespace BioscoopSysteemAdmin.WebUI.Controllers {
                     subscriber.ImageData = new byte[image.ContentLength];
                     image.InputStream.Read(subscriber.ImageData, 0, image.ContentLength);
                 }
-                if (repo.GetSubscriberByName(subscriber) == null) {
+                if (!repo.DuplicateSubscriber(subscriber)) {
                     repo.AddSubscriber(subscriber);
                     ViewBag.SubscriberSucces = "Abonnement is aangemaakt.";
                     print.SubscriberPrint(subscriber);
