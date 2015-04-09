@@ -237,6 +237,7 @@ namespace BioscoopSysteemWebsite.WebUI.Controllers
         {
             char[] splitchar = new Char[] { ',' };
             string email = Request["emailadres"];
+            string voornaam = Request["voornaam"];
             IEnumerable<Mail> maillist = repo.GetAllMails();
             List<Show> model = repo.GetAllShows().ToList();
             Mail newMail = new Mail();
@@ -266,6 +267,7 @@ namespace BioscoopSysteemWebsite.WebUI.Controllers
                         ViewBag.email = "You are subscribed to the newsletter.";
                     }
                     newMail.MailAdres = email;
+                    newMail.Voornaam = voornaam;
                 }
             }
             repo.AddMailForNewsletter(newMail);

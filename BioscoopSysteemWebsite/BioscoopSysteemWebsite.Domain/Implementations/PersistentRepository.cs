@@ -210,5 +210,14 @@ namespace BioscoopSysteemWebsite.Domain.Implementations
             context.TicketSoort.Add(ticket);
             context.SaveChanges();
         }
+
+        public void AddSubscriber(Subscriber subscriber) {
+            context.Subscribers.Add(subscriber);
+            context.SaveChanges();
+        }
+
+        public Subscriber GetSubscriberByName(Subscriber subscriber) {
+            return context.Subscribers.Where(s => s == subscriber).First();
+        }
     }
 }

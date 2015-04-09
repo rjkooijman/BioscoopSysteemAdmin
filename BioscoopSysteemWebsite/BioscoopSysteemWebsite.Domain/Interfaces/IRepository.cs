@@ -74,5 +74,9 @@ namespace BioscoopSysteemWebsite.Domain.Interfaces {
         void ChangeSeats(int seatNumber, int rowNumber);
 
         void ChangeTicket(int? ticketid, int? seatid);
+
+        void AddSubscriber(Subscriber subscriber);
+
+        Subscriber GetSubscriberByName(Subscriber subscriber);
     }
 }
